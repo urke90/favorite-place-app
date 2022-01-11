@@ -1,14 +1,15 @@
 import UserItem from './UserItem';
 
-import { UserModel } from '../../models/userModel';
+import { UserModel } from '../../models/user/userModel';
+import Card from 'shared/components/UI/Card';
 import './UserList.css';
 
 const UserList: React.FC<{ users: UserModel[] }> = ({ users }) => {
     if (users.length === 0) {
         return (
-            <div className="center">
+            <Card className="center">
                 <h2>No users found!</h2>
-            </div>
+            </Card>
         );
     }
 
