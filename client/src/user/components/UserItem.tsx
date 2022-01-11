@@ -4,12 +4,9 @@ import Avatar from '../../shared/components/UI/Avatar';
 import Card from '../../shared/components/UI/Card';
 import './UserItem.css';
 
-const UserItem: React.FC<{
-    id: string;
-    image: string;
-    name: string;
-    placeCount: number;
-}> = ({ id, image, name, placeCount }) => {
+import { UserProps } from 'models/userProps';
+
+const UserItem: React.FC<UserProps> = ({ id, image, name, places }) => {
     return (
         <li className="user-item">
             <Card className="user-item__content">
@@ -26,7 +23,7 @@ const UserItem: React.FC<{
                     <div className="user-item__info">
                         <h2>{name}</h2>
                         <h3>
-                            {placeCount} {placeCount === 1 ? 'Place' : 'Places'}
+                            {places} {places === 1 ? 'Place' : 'Places'}
                         </h3>
                     </div>
                 </Link>

@@ -20,7 +20,7 @@ const UserList: React.FC<{ users: UserModel[] }> = ({ users }) => {
                     id={user.id}
                     image={user.image}
                     name={user.name}
-                    placeCount={user.places}
+                    places={user.places}
                 />
             ))}
         </ul>
