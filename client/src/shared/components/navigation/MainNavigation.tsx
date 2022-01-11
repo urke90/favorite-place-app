@@ -5,7 +5,7 @@ import NavLinks from './NavLinks';
 import SideDrawer from './SideDrawer';
 import './MainNavigation.css';
 
-const MainNavigation = () => {
+const MainNavigation: React.FC = () => {
     return (
         <>
             <SideDrawer>
