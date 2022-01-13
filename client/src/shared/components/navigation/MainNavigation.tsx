@@ -16,9 +16,9 @@ const MainNavigation: React.FC = () => {
 
     return (
         <>
-            {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
+            {drawerIsOpen && <Backdrop onCloseDrawer={closeDrawerHandler} />}
 
-            <SideDrawer show={drawerIsOpen}>
+            <SideDrawer show={drawerIsOpen} onCloseDrawer={closeDrawerHandler}>
                 <nav className="main-navigation__drawer-nav">
                     <NavLinks />
                 </nav>
