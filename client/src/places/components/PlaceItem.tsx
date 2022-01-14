@@ -1,12 +1,14 @@
 import Card from 'shared/components/UI/Card';
 import { PlacesProps } from 'models/places/places';
+import Button from 'shared/components/FormElements/Button';
 import './PlaceItem.css';
 
 const PlaceItem: React.FC<PlacesProps> = ({
     imageUrl,
     title,
     description,
-    address
+    address,
+    id
 }) => {
     return (
         <li className="place-item">
@@ -20,9 +22,9 @@ const PlaceItem: React.FC<PlacesProps> = ({
                     <p>{description}</p>
                 </div>
                 <div className="place-item__actions">
-                    <button>VIEW ON MAP</button>
-                    <button>EDIT</button>
-                    <button>DELETE</button>
+                    <Button inverse>VIEW ON MAP</Button>
+                    <Button to={`/places/${id}`}>EDIT</Button>
+                    <Button danger>DELETE</Button>
                 </div>
             </Card>
         </li>

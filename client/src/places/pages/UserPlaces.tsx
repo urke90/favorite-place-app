@@ -33,7 +33,6 @@ const DUMMY_PLACES: Places[] = [
 
 const UserPlaces = () => {
     const userId = useParams().userId;
-    console.log('userId', userId);
 
     const filteredPlaces: Places[] = DUMMY_PLACES.filter(
         (place) => place.creatorId === userId
