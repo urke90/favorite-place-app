@@ -16,7 +16,7 @@ const MainNavigation: React.FC = () => {
 
     return (
         <>
-            {drawerIsOpen && <Backdrop onCloseDrawer={closeDrawerHandler} />}
+            {drawerIsOpen && <Backdrop onCloseModal={closeDrawerHandler} />}
 
             <SideDrawer show={drawerIsOpen} onCloseDrawer={closeDrawerHandler}>
                 <nav className="main-navigation__drawer-nav">
