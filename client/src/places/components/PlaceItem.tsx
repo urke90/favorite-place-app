@@ -4,6 +4,7 @@ import Card from 'shared/components/UI/Card';
 import { PlacesProps } from 'models/places/places';
 import Button from 'shared/components/FormElements/Button';
 import Modal from 'shared/components/UI/Modal';
+import Map from 'shared/components/UI/Map';
 
 import './PlaceItem.css';
 
@@ -30,7 +31,9 @@ const PlaceItem: React.FC<PlacesProps> = ({
                 footerClass="place-item__modal-actions"
                 footer={<Button onBtnClick={closeMapHandler}>CLOSE</Button>}
             >
-                <div>Render GoogleMaps Here</div>
+                <div className="map-container">
+                    <Map />
+                </div>
             </Modal>
             <li className="place-item">
                 <Card className="place-item__content">
