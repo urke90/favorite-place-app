@@ -1,57 +1,19 @@
 import React, { useReducer } from 'react';
-
-import { validate } from 'shared/util/validatiors';
+import { inputInitState, inputReducer } from 'reducers/NewPlace';
+import { Validators } from 'models/validators/validators';
 
 import './Input.css';
-
-type ActionType =
-    | { type: 'CHANGE'; value: string; validators: Validators[] }
-    | { type: 'TOUCH'; value?: string; validators: Validators[] };
-
-interface InputState {
-    value: string;
-    isValid: boolean;
-    isTouched: boolean;
-}
-
-interface Validators {
-    type: string;
-    value?: string;
-}
-
-const inputInitState: InputState = {
-    value: '',
-    isValid: false,
-    isTouched: false
-};
-
-const inputReducer = (state: InputState, action: ActionType) => {
-    switch (action.type) {
-        case 'CHANGE':
-            return {
-                ...state,
-                value: action.value,
-                isValid: validate(action.value, action.validators)
-            };
-        case 'TOUCH':
-            return {
-                ...state,
-                isTouched: true
-            };
-        default:
-            return state;
-    }
-};
 
 interface InputProps {
     element: string;
     id: string;
-    type: string;
+    type?: string;
     placeholder?: string;
     rows?: number;
     errorText: string;
     label: string;
     validators: Validators[];
+    onInputChange: () => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -62,7 +24,8 @@ const Input: React.FC<InputProps> = ({
     rows = 3,
     errorText,
     label,
-    validators
+    validators,
+    onInputChange
 }) => {
     const [inputState, dispatch] = useReducer(inputReducer, inputInitState);
 
