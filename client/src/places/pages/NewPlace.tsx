@@ -85,8 +85,12 @@ const NewPlace = () => {
         []
     );
 
+    const newPlaceSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
+    };
+
     return (
-        <form className="place-form">
+        <form className="place-form" onSubmit={newPlaceSubmitHandler}>
             <Input
                 id="title"
                 element="input"
@@ -102,6 +106,14 @@ const NewPlace = () => {
                 label="Description"
                 errorText="Please eneter a valid description"
                 validators={[VALIDATOR_MINLENGTH(5)]}
+                onInputChange={inputChangeHandler}
+            />
+            <Input
+                id="address"
+                element="input"
+                label="Address"
+                errorText="Please enter a valid address"
+                validators={[VALIDATOR_REQUIRE()]}
                 onInputChange={inputChangeHandler}
             />
             <Button disabled={!newPlaceState.formIsValid} type="submit">
