@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { inputInitState, inputReducer } from 'reducers/NewPlace';
 import { Validators } from 'models/validators/validators';
 
@@ -13,7 +13,7 @@ interface InputProps {
     errorText: string;
     label: string;
     validators: Validators[];
-    onInputChange: () => void;
+    onInputChange: (id: string, value: string, isValid: boolean) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -28,6 +28,7 @@ const Input: React.FC<InputProps> = ({
     onInputChange
 }) => {
     const [inputState, dispatch] = useReducer(inputReducer, inputInitState);
+    const { value, isValid } = inputState;
 
     const changeHandler: React.ChangeEventHandler<
         HTMLInputElement | HTMLTextAreaElement
@@ -38,6 +39,10 @@ const Input: React.FC<InputProps> = ({
     const touchHandler = () => {
         dispatch({ type: 'TOUCH', validators });
     };
+
+    useEffect(() => {
+        onInputChange(id, value, isValid);
+    }, [id, onInputChange, value, isValid]);
 
     const elementType =
         element === 'input' ? (
