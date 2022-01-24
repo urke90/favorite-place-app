@@ -1,4 +1,4 @@
-export interface Places {
+export interface PlacesState {
     id: string;
     title: string;
     description: string;
@@ -13,4 +13,4 @@ interface Location {
     lng: number;
 }
 
-export interface PlacesProps extends Places {}
+export interface PlacesProps extends PlacesState {}

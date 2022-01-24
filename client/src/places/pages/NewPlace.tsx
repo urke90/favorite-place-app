@@ -1,5 +1,5 @@
-import { useReducer, useCallback } from 'react';
-
+import usePlaceForm from 'hooks/use-form';
+import { NewUpdatePlaceState } from 'models/places/updateNewPlace';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import {
@@ -9,27 +9,8 @@ import {
 
 import './NewPlace.css';
 
-type ActionType = {
-    type: 'INPUT_CHANGE';
-    id: string;
-    value: string;
-    isValid: boolean;
-};
-
-interface NewPlaceItem {
-    value: string;
-    isValid: boolean;
-}
-
-interface NewPlaceState {
-    inputs: {
-        [key: string]: NewPlaceItem;
-    };
-
-    formIsValid: boolean;
-}
-
-const newPlaceInitState: NewPlaceState = {
+// Define state in component since usePlaceForm needs to be passed state.
+const newPlaceInitState: NewUpdatePlaceState = {
     inputs: {
         title: {
             value: '',
@@ -43,47 +24,10 @@ const newPlaceInitState: NewPlaceState = {
     formIsValid: false
 };
 
-const newPlaceReducer = (
-    state: NewPlaceState,
-    { type, id, value, isValid }: ActionType
-) => {
-    switch (type) {
-        case 'INPUT_CHANGE':
-            const newState = {
-                ...state,
-                inputs: {
-                    ...state.inputs,
-                    [id]: {
-                        value,
-                        isValid
-                    }
-                }
-            };
-
-            newState.formIsValid = !Object.values(newState.inputs).some(
-                (input) => input.isValid === false
-            );
-
-            return {
-                ...newState
-            };
-        default:
-            return state;
-    }
-};
-
-const NewPlace = () => {
-    const [newPlaceState, dispatch] = useReducer(
-        newPlaceReducer,
-        newPlaceInitState
-    );
-
-    const inputChangeHandler = useCallback(
-        (id: string, value: string, isValid: boolean) => {
-            dispatch({ type: 'INPUT_CHANGE', id, value, isValid });
-        },
-        []
-    );
+const NewPlace: React.FC = () => {
+    const [newPlaceState, inputChangeHandler] = usePlaceForm(newPlaceInitState);
+    console.log('newPlaceState', newPlaceState);
+    console.log('inputChangeHandler', inputChangeHandler);
 
     const newPlaceSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
