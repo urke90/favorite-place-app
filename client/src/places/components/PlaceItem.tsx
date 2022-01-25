@@ -16,10 +16,21 @@ const PlaceItem: React.FC<PlacesProps> = ({
     id
 }) => {
     const [showGoogleMap, setShowGoogleMap] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const openMapHandler = () => setShowGoogleMap(true);
 
     const closeMapHandler = () => setShowGoogleMap(false);
+
+    const toggleDeleteModalHandler = () =>
+        setShowDeleteModal((prevShowState) => !prevShowState);
+
+    // add logic for deleting place when we have BE ready
+    const deletePlaceHandler = () => {
+        console.log('DELETED PLACE');
+    };
+
+    console.log('showDeleteModal', showDeleteModal);
 
     return (
         <>
@@ -29,11 +40,32 @@ const PlaceItem: React.FC<PlacesProps> = ({
                 header={address}
                 contentClass="place-item__model-content"
                 footerClass="place-item__modal-actions"
-                footer={<Button onBtnClick={closeMapHandler}>CLOSE</Button>}
+                footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
             >
                 <div className="map-container">
                     <Map />
                 </div>
+            </Modal>
+            <Modal
+                showModal={showDeleteModal}
+                onCloseModal={toggleDeleteModalHandler}
+                header="Delete place?"
+                footerClass="place-item__modal-actions"
+                footer={
+                    <>
+                        <Button inverse onClick={toggleDeleteModalHandler}>
+                            CLOSE
+                        </Button>
+                        <Button danger onClick={deletePlaceHandler}>
+                            DELETE
+                        </Button>
+                    </>
+                }
+            >
+                <p>
+                    Deleting place can't be undone. Are you sure you want to
+                    delete place anyway?
+                </p>
             </Modal>
             <li className="place-item">
                 <Card className="place-item__content">
@@ -46,11 +78,13 @@ const PlaceItem: React.FC<PlacesProps> = ({
                         <p>{description}</p>
                     </div>
                     <div className="place-item__actions">
-                        <Button onBtnClick={openMapHandler} inverse>
+                        <Button onClick={openMapHandler} inverse>
                             VIEW ON MAP
                         </Button>
                         <Button to={`/places/${id}`}>EDIT</Button>
-                        <Button danger>DELETE</Button>
+                        <Button onClick={toggleDeleteModalHandler} danger>
+                            DELETE
+                        </Button>
                     </div>
                 </Card>
             </li>

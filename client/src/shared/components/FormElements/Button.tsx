@@ -8,7 +8,7 @@ interface ButtonProps {
     inverse?: boolean;
     danger?: boolean;
     to?: string;
-    onBtnClick?: () => void;
+    onClick?: () => void;
     disabled?: boolean;
     type?: 'submit' | 'button' | 'reset';
 }
@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
     inverse,
     danger,
     to,
-    onBtnClick,
+    onClick,
     disabled,
     children,
     type
@@ -54,7 +54,7 @@ const Button: React.FC<ButtonProps> = ({
                 inverse && 'button--inverse'
             } ${danger && 'button--danger'}`}
             type={type}
-            onClick={onBtnClick}
+            onClick={onClick}
             disabled={disabled}
         >
             {children}
