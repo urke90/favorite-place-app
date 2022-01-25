@@ -13,8 +13,6 @@ const placeFormReducer = (
     state: NewUpdatePlaceState,
     { type, id, value, isValid }: ActionType
 ) => {
-    console.log('state in use-form', state);
-
     switch (type) {
         case 'INPUT_CHANGE':
             const newState = {
