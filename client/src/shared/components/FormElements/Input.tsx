@@ -14,8 +14,8 @@ interface InputProps {
     label: string;
     validators: Validators[];
     onInputChange: (id: string, value: string, isValid: boolean) => void;
-    existingValue?: string;
-    shouldBeValid?: boolean;
+    initValue?: string;
+    initValid?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -28,12 +28,12 @@ const Input: React.FC<InputProps> = ({
     label,
     validators,
     onInputChange,
-    existingValue,
-    shouldBeValid
+    initValue,
+    initValid
 }) => {
     const [inputState, dispatch] = useReducer(inputReducer, {
-        value: '',
-        isValid: shouldBeValid ? true : false,
+        value: initValue || '',
+        isValid: initValid || false,
         isTouched: false
     });
     const { value, isValid, isTouched } = inputState;
@@ -58,7 +58,7 @@ const Input: React.FC<InputProps> = ({
                 type={type}
                 id={id}
                 placeholder={placeholder}
-                value={existingValue || value}
+                value={initValue || value}
                 onChange={changeHandler}
                 onBlur={touchHandler}
             />
@@ -67,7 +67,7 @@ const Input: React.FC<InputProps> = ({
                 id={id}
                 rows={rows}
                 onChange={changeHandler}
-                value={existingValue || value}
+                value={initValue || value}
                 onBlur={touchHandler}
             />
         );
