@@ -7,7 +7,7 @@ import {
     VALIDATOR_MINLENGTH
 } from 'shared/util/validatiors';
 
-import './NewPlace.css';
+import './PlaceForm.css';
 
 // Define state in component since usePlaceForm needs to be passed state.
 const newPlaceInitState: NewUpdatePlaceState = {
@@ -17,6 +17,10 @@ const newPlaceInitState: NewUpdatePlaceState = {
             isValid: false
         },
         description: {
+            value: '',
+            isValid: false
+        },
+        address: {
             value: '',
             isValid: false
         }

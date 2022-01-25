@@ -34,12 +34,12 @@ const placeFormReducer = (
                 ...newState
             };
         default:
-            return state;
+            throw new Error('Action Type is not valid');
     }
 };
 
 const usePlaceForm = (stateSchema: NewUpdatePlaceState) => {
-    const [newPlaceState, dispatch] = useReducer(placeFormReducer, stateSchema);
+    const [placeState, dispatch] = useReducer(placeFormReducer, stateSchema);
 
     const inputChangeHandler = useCallback(
         (id: string, value: string, isValid: boolean) => {
@@ -48,7 +48,7 @@ const usePlaceForm = (stateSchema: NewUpdatePlaceState) => {
         []
     );
 
-    return [newPlaceState, inputChangeHandler] as const;
+    return [placeState, inputChangeHandler] as const;
 };
 
 export default usePlaceForm;
