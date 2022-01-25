@@ -26,8 +26,6 @@ const newPlaceInitState: NewUpdatePlaceState = {
 
 const NewPlace: React.FC = () => {
     const [newPlaceState, inputChangeHandler] = usePlaceForm(newPlaceInitState);
-    console.log('newPlaceState', newPlaceState);
-    console.log('inputChangeHandler', inputChangeHandler);
 
     const newPlaceSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
@@ -40,7 +38,7 @@ const NewPlace: React.FC = () => {
                 element="input"
                 type="text"
                 label="Title"
-                errorText="Please eneter a valid title"
+                errorText="Please enter a valid title"
                 validators={[VALIDATOR_REQUIRE()]}
                 onInputChange={inputChangeHandler}
             />

@@ -4,6 +4,7 @@ import Users from './user/pages/Users';
 import NewPlace from './places/pages/NewPlace';
 import MainNavigation from 'shared/components/navigation/MainNavigation';
 import Places from 'places/pages/Places';
+import UpdatePlace from 'places/pages/UpdatePlace';
 
 const App: React.FC = () => {
     return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<Users />} />
                     <Route path="/:userId/places" element={<Places />} />
                     <Route path="/places/new" element={<NewPlace />} />
+                    <Route path="/places/:placeId" element={<UpdatePlace />} />
                     {/* <Route path="*" element={<Navigate to="/" />} /> */}
                 </Routes>
             </main>
