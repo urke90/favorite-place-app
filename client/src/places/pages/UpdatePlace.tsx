@@ -4,12 +4,19 @@ import usePlaceForm from 'hooks/use-form';
 import { PlacesState } from 'models/places/places';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
+import Card from 'shared/components/UI/Card';
 import {
     VALIDATOR_REQUIRE,
     VALIDATOR_MINLENGTH
 } from 'shared/util/validatiors';
 
 import './PlaceForm.css';
+
+/**
+ * this apporach should be fine for now until Node BE and DB is introduced.
+ * when BE is is finished we will have async call and we should have function that will set input values in place form reducer
+ * we should also have load spinner and error msg and show form ONLY if we have form
+ */
 
 const DUMMY_PLACES: PlacesState[] = [
     {
@@ -48,15 +55,15 @@ const UpdatePlace: React.FC = () => {
     const [updatePlaceFormState, inputChangeHandler] = usePlaceForm({
         inputs: {
             title: {
-                value: '',
-                isValid: false
+                value: placeToUpdate?.title || '',
+                isValid: true
             },
             description: {
-                value: '',
-                isValid: false
+                value: placeToUpdate?.description || '',
+                isValid: true
             }
         },
-        formIsValid: false
+        formIsValid: true
     });
 
     const placeUpdateSubmitHandler = (
@@ -69,7 +76,9 @@ const UpdatePlace: React.FC = () => {
     if (!placeToUpdate) {
         return (
             <div className="center">
-                <h2>Place Not Found</h2>
+                <Card>
+                    <h2>Place Not Found</h2>
+                </Card>
             </div>
         );
     }
