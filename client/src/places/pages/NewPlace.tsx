@@ -2,10 +2,7 @@ import usePlaceForm from 'hooks/use-form';
 import { NewUpdatePlaceState } from 'models/places/updateNewPlace';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
-import {
-    VALIDATOR_REQUIRE,
-    VALIDATOR_MINLENGTH
-} from 'shared/util/validatiors';
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
 import './PlaceForm.css';
 

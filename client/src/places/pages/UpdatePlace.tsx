@@ -5,10 +5,7 @@ import { PlacesState } from 'models/places/places';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import Card from 'shared/components/UI/Card';
-import {
-    VALIDATOR_REQUIRE,
-    VALIDATOR_MINLENGTH
-} from 'shared/util/validatiors';
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
 import './PlaceForm.css';
 

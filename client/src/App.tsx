@@ -5,6 +5,7 @@ import NewPlace from './places/pages/NewPlace';
 import MainNavigation from 'shared/components/navigation/MainNavigation';
 import Places from 'places/pages/Places';
 import UpdatePlace from 'places/pages/UpdatePlace';
+import Auth from 'auth/Auth';
 
 const App: React.FC = () => {
     return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
                     <Route path="/:userId/places" element={<Places />} />
                     <Route path="/places/new" element={<NewPlace />} />
                     <Route path="/places/:placeId" element={<UpdatePlace />} />
+                    <Route path="/auth" element={<Auth />} />
                     {/* <Route path="*" element={<Navigate to="/" />} /> */}
                 </Routes>
             </main>
