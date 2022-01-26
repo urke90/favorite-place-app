@@ -1,6 +1,6 @@
 import { useReducer, useCallback } from 'react';
 
-import { NewUpdatePlaceState } from '../models/places/updateNewPlace';
+import { FormState } from 'models/form/form';
 
 type ActionType = {
     type: 'INPUT_CHANGE';
@@ -10,7 +10,7 @@ type ActionType = {
 };
 
 const placeFormReducer = (
-    state: NewUpdatePlaceState,
+    state: FormState,
     { type, id, value, isValid }: ActionType
 ) => {
     switch (type) {
@@ -38,7 +38,7 @@ const placeFormReducer = (
     }
 };
 
-const usePlaceForm = (stateSchema: NewUpdatePlaceState) => {
+const useForm = (stateSchema: FormState) => {
     const [placeState, dispatch] = useReducer(placeFormReducer, stateSchema);
 
     const inputChangeHandler = useCallback(
@@ -51,4 +51,4 @@ const usePlaceForm = (stateSchema: NewUpdatePlaceState) => {
     return [placeState, inputChangeHandler] as const;
 };
 
-export default usePlaceForm;
+export default useForm;
