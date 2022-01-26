@@ -30,8 +30,6 @@ const PlaceItem: React.FC<PlacesProps> = ({
         console.log('DELETED PLACE');
     };
 
-    console.log('showDeleteModal', showDeleteModal);
-
     return (
         <>
             <Modal

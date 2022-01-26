@@ -7,7 +7,7 @@ import './Input.css';
 interface InputProps {
     element: string;
     id: string;
-    type?: string;
+    type?: 'text' | 'email' | 'password';
     placeholder?: string;
     rows?: number;
     errorText: string;

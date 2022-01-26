@@ -1,6 +1,6 @@
 import { InputReducerState } from 'models/input/input';
 import { Validators } from 'models/validators/validators';
-import { validate } from 'shared/util/validatiors';
+import { validate } from 'util/validatiors';
 
 type ActionType =
     | { type: 'CHANGE'; value: string; validators: Validators[] }
