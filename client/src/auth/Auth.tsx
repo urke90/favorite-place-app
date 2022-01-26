@@ -1,12 +1,12 @@
-import usePlaceForm from 'hooks/use-form';
-import { NewUpdatePlaceState } from 'models/places/updateNewPlace';
+import useAuthForm from 'hooks/use-form';
+import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
 import './Auth.css';
 
-const authState: NewUpdatePlaceState = {
+const authInitState: FormState = {
     inputs: {
         email: {
             value: '',
@@ -21,11 +21,11 @@ const authState: NewUpdatePlaceState = {
 };
 
 const Auth: React.FC = () => {
-    const [authFormState, inputChangeHandler] = usePlaceForm(authState);
+    const [authState, inputChangeHandler] = useAuthForm(authInitState);
 
     const submitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
         evt.preventDefault();
-        console.log('authFormState', authFormState);
+        console.log('authState', authState);
     };
 
     return (
@@ -50,7 +50,7 @@ const Auth: React.FC = () => {
                 validators={[VALIDATOR_MINLENGTH(6)]}
                 onInputChange={inputChangeHandler}
             />
-            <Button disabled={!authFormState.formIsValid} type="submit">
+            <Button disabled={!authState.formIsValid} type="submit">
                 LOGIN/SIGNUP
             </Button>
         </form>

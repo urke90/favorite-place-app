@@ -49,7 +49,7 @@ const UpdatePlace: React.FC = () => {
 
     const placeToUpdate = DUMMY_PLACES.find((place) => place.id === placeId);
 
-    const [updatePlaceFormState, inputChangeHandler] = usePlaceForm({
+    const [updatePlaceState, inputChangeHandler] = usePlaceForm({
         inputs: {
             title: {
                 value: placeToUpdate?.title || '',
@@ -67,7 +67,7 @@ const UpdatePlace: React.FC = () => {
         evt: React.FormEvent<HTMLFormElement>
     ) => {
         evt.preventDefault();
-        console.log('updatePlaceFormState', updatePlaceFormState.inputs);
+        console.log('updatePlaceState', updatePlaceState.inputs);
     };
 
     if (!placeToUpdate) {
@@ -90,8 +90,8 @@ const UpdatePlace: React.FC = () => {
                 validators={[VALIDATOR_REQUIRE()]}
                 onInputChange={inputChangeHandler}
                 errorText="Please enter a valid title"
-                initValue={updatePlaceFormState.inputs.title.value}
-                initValid={updatePlaceFormState.inputs.title.isValid}
+                initValue={updatePlaceState.inputs.title.value}
+                initValid={updatePlaceState.inputs.title.isValid}
             />
             <Input
                 id="description"
@@ -100,10 +100,10 @@ const UpdatePlace: React.FC = () => {
                 validators={[VALIDATOR_MINLENGTH(5)]}
                 onInputChange={inputChangeHandler}
                 errorText="Please enter a valid title"
-                initValue={updatePlaceFormState.inputs.description.value}
-                initValid={updatePlaceFormState.inputs.description.isValid}
+                initValue={updatePlaceState.inputs.description.value}
+                initValid={updatePlaceState.inputs.description.isValid}
             />
-            <Button type="submit" disabled={!updatePlaceFormState.formIsValid}>
+            <Button type="submit" disabled={!updatePlaceState.formIsValid}>
                 UPDATE
             </Button>
         </form>
