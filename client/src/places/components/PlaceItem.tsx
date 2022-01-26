@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import useToggle from 'hooks/use-toggle';
 import Card from 'shared/components/UI/Card';
 import { PlacesProps } from 'models/places/places';
 import Button from 'shared/components/FormElements/Button';
@@ -15,15 +16,8 @@ const PlaceItem: React.FC<PlacesProps> = ({
     address,
     id
 }) => {
-    const [showGoogleMap, setShowGoogleMap] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    const openMapHandler = () => setShowGoogleMap(true);
-
-    const closeMapHandler = () => setShowGoogleMap(false);
-
-    const toggleDeleteModalHandler = () =>
-        setShowDeleteModal((prevShowState) => !prevShowState);
+    const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
+    const [showDeleteModal, toggleDeletePlaceModal] = useToggle(false);
 
     // add logic for deleting place when we have BE ready
     const deletePlaceHandler = () => {
@@ -34,11 +28,11 @@ const PlaceItem: React.FC<PlacesProps> = ({
         <>
             <Modal
                 showModal={showGoogleMap}
-                onCloseModal={closeMapHandler}
+                onCloseModal={toggleGoogleMapHandler}
                 header={address}
                 contentClass="place-item__model-content"
                 footerClass="place-item__modal-actions"
-                footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
+                footer={<Button onClick={toggleGoogleMapHandler}>CLOSE</Button>}
             >
                 <div className="map-container">
                     <Map />
@@ -46,12 +40,12 @@ const PlaceItem: React.FC<PlacesProps> = ({
             </Modal>
             <Modal
                 showModal={showDeleteModal}
-                onCloseModal={toggleDeleteModalHandler}
+                onCloseModal={toggleDeletePlaceModal}
                 header="Delete place?"
                 footerClass="place-item__modal-actions"
                 footer={
                     <>
-                        <Button inverse onClick={toggleDeleteModalHandler}>
+                        <Button inverse onClick={toggleDeletePlaceModal}>
                             CLOSE
                         </Button>
                         <Button danger onClick={deletePlaceHandler}>
@@ -76,11 +70,11 @@ const PlaceItem: React.FC<PlacesProps> = ({
                         <p>{description}</p>
                     </div>
                     <div className="place-item__actions">
-                        <Button onClick={openMapHandler} inverse>
+                        <Button onClick={toggleGoogleMapHandler} inverse>
                             VIEW ON MAP
                         </Button>
                         <Button to={`/places/${id}`}>EDIT</Button>
-                        <Button onClick={toggleDeleteModalHandler} danger>
+                        <Button onClick={toggleDeletePlaceModal} danger>
                             DELETE
                         </Button>
                     </div>
