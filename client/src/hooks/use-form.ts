@@ -2,26 +2,30 @@ import { useReducer, useCallback } from 'react';
 
 import { FormState } from 'models/form/form';
 
-type ActionType = {
-    type: 'INPUT_CHANGE';
-    id: string;
-    value: string;
-    isValid: boolean;
-};
+enum ReducerActionType {
+    INPUT_CHANGE = 'INPUT_CHANGE',
+    SET_DATA = 'SET_DATA'
+}
 
-const placeFormReducer = (
-    state: FormState,
-    { type, id, value, isValid }: ActionType
-) => {
-    switch (type) {
-        case 'INPUT_CHANGE':
-            const newState = {
+type Actions =
+    | {
+          type: ReducerActionType.INPUT_CHANGE;
+          payload: { id: string; value: string; isValid: boolean };
+      }
+    | { type: ReducerActionType.SET_DATA; payload: { inputs: FormState } };
+
+const placeFormReducer = (state: FormState, action: Actions) => {
+    let newState: FormState;
+
+    switch (action.type) {
+        case ReducerActionType.INPUT_CHANGE:
+            newState = {
                 ...state,
                 inputs: {
                     ...state.inputs,
-                    [id]: {
-                        value,
-                        isValid
+                    [action.payload.id]: {
+                        value: action.payload.value,
+                        isValid: action.payload.isValid
                     }
                 }
             };
@@ -30,9 +34,18 @@ const placeFormReducer = (
                 (input) => input.isValid === false
             );
 
-            return {
-                ...newState
+            return newState;
+
+        case ReducerActionType.SET_DATA:
+            newState = {
+                ...action.payload.inputs
             };
+
+            newState.formIsValid = !Object.values(newState.inputs).some(
+                (input) => input.isValid === false
+            );
+
+            return newState;
         default:
             throw new Error('Action Type is not valid');
     }
@@ -43,12 +56,19 @@ const useForm = (stateSchema: FormState) => {
 
     const inputChangeHandler = useCallback(
         (id: string, value: string, isValid: boolean) => {
-            dispatch({ type: 'INPUT_CHANGE', id, value, isValid });
+            dispatch({
+                type: ReducerActionType.INPUT_CHANGE,
+                payload: { id, value, isValid }
+            });
         },
         []
     );
 
-    return [placeState, inputChangeHandler] as const;
+    const setFormData = useCallback((inputs: FormState) => {
+        dispatch({ type: ReducerActionType.SET_DATA, payload: { inputs } });
+    }, []);
+
+    return [placeState, inputChangeHandler, setFormData] as const;
 };
 
 export default useForm;

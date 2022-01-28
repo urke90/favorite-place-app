@@ -15,6 +15,10 @@ import './PlaceForm.css';
  * we should also have load spinner and error msg and show form ONLY if we have form
  */
 
+/**
+ * Gatsby i netlify za CV
+ */
+
 const DUMMY_PLACES: PlacesState[] = [
     {
         id: 'p1',
@@ -45,7 +49,7 @@ const DUMMY_PLACES: PlacesState[] = [
 ];
 
 const UpdatePlace: React.FC = () => {
-    const { placeId } = useParams();
+    const { placeId } = useParams<{ placeId: string }>();
 
     const placeToUpdate = DUMMY_PLACES.find((place) => place.id === placeId);
 
@@ -63,13 +67,6 @@ const UpdatePlace: React.FC = () => {
         formIsValid: true
     });
 
-    const placeUpdateSubmitHandler = (
-        evt: React.FormEvent<HTMLFormElement>
-    ) => {
-        evt.preventDefault();
-        console.log('updatePlaceState', updatePlaceState.inputs);
-    };
-
     if (!placeToUpdate) {
         return (
             <div className="center">
@@ -79,6 +76,13 @@ const UpdatePlace: React.FC = () => {
             </div>
         );
     }
+
+    const placeUpdateSubmitHandler = (
+        evt: React.FormEvent<HTMLFormElement>
+    ) => {
+        evt.preventDefault();
+        console.log('updatePlaceState', updatePlaceState.inputs);
+    };
 
     return (
         <form className="place-form" onSubmit={placeUpdateSubmitHandler}>

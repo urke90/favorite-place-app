@@ -1,12 +1,19 @@
+import { useEffect } from 'react';
+
 import useAuthForm from 'hooks/use-form';
+import useAuthStatusToggle from 'hooks/use-toggle';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
-import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from 'util/validatiors';
+import {
+    VALIDATOR_EMAIL,
+    VALIDATOR_MINLENGTH,
+    VALIDATOR_REQUIRE
+} from 'util/validatiors';
 
 import './Auth.css';
 
-const authInitState: FormState = {
+const authLoginState: FormState = {
     inputs: {
         email: {
             value: '',
@@ -17,19 +24,58 @@ const authInitState: FormState = {
             isValid: false
         }
     },
-    formIsValid: true
+    formIsValid: false
+};
+
+const authSignupState: FormState = {
+    inputs: {
+        name: {
+            value: '',
+            isValid: false
+        },
+        email: {
+            value: '',
+            isValid: false
+        },
+        password: {
+            value: '',
+            isValid: false
+        }
+    },
+    formIsValid: false
 };
 
 const Auth: React.FC = () => {
-    const [authState, inputChangeHandler] = useAuthForm(authInitState);
+    const [isLoginMode, toggleLoginMode] = useAuthStatusToggle(true);
+
+    const [authState, inputChangeHandler, setAuthFormData] =
+        useAuthForm(authLoginState);
 
     const submitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
         evt.preventDefault();
-        console.log('authState', authState);
     };
+
+    useEffect(() => {
+        if (isLoginMode) {
+            return setAuthFormData(authLoginState);
+        }
+        setAuthFormData(authSignupState);
+    }, [isLoginMode]);
 
     return (
         <form className="auth-form" onSubmit={submitHandler}>
+            {!isLoginMode && (
+                <Input
+                    id="name"
+                    label="Name"
+                    element="input"
+                    type="text"
+                    placeholder="User name"
+                    errorText="Please enter name"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    onInputChange={inputChangeHandler}
+                />
+            )}
             <Input
                 id="email"
                 label="Email"
@@ -50,9 +96,16 @@ const Auth: React.FC = () => {
                 validators={[VALIDATOR_MINLENGTH(6)]}
                 onInputChange={inputChangeHandler}
             />
-            <Button disabled={!authState.formIsValid} type="submit">
-                LOGIN/SIGNUP
-            </Button>
+            <div className="center column">
+                <Button disabled={!authState.formIsValid} type="submit">
+                    {isLoginMode ? 'LOGIN' : 'SIGNUP'}
+                </Button>
+
+                <p>Signup instead?</p>
+                <Button inverse onClick={toggleLoginMode} type="button">
+                    SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
+                </Button>
+            </div>
         </form>
     );
 };
