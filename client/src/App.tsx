@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+import AuthContextProvider, { AuthContext } from 'context/AuthContext';
+
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Users from './user/pages/Users';
@@ -8,8 +11,12 @@ import UpdatePlace from 'places/pages/UpdatePlace';
 import Auth from 'auth/Auth';
 
 const App: React.FC = () => {
+    const authCtx = useContext(AuthContext);
+
+    console.log('authCtx', authCtx);
+
     return (
-        <>
+        <AuthContextProvider>
             <MainNavigation />
             <main>
                 <Routes>
@@ -21,7 +28,7 @@ const App: React.FC = () => {
                     {/* <Route path="*" element={<Navigate to="/" />} /> */}
                 </Routes>
             </main>
-        </>
+        </AuthContextProvider>
     );
 };
 
