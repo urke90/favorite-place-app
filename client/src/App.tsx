@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
+import AuthContextProvider from 'context/AuthContext';
 import Users from './user/pages/Users';
 import NewPlace from './places/pages/NewPlace';
 import MainNavigation from 'shared/components/navigation/MainNavigation';
@@ -9,7 +10,7 @@ import Auth from 'auth/Auth';
 
 const App: React.FC = () => {
     return (
-        <>
+        <AuthContextProvider>
             <MainNavigation />
             <main>
                 <Routes>
@@ -21,7 +22,7 @@ const App: React.FC = () => {
                     {/* <Route path="*" element={<Navigate to="/" />} /> */}
                 </Routes>
             </main>
-        </>
+        </AuthContextProvider>
     );
 };
 
