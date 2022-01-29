@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import useAuthForm from 'hooks/use-form';
-import useAuthStatusToggle from 'hooks/use-toggle';
+import useForm from 'hooks/use-form';
+import useToggle from 'hooks/use-toggle';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
@@ -46,10 +46,10 @@ const authSignupState: FormState = {
 };
 
 const Auth: React.FC = () => {
-    const [isLoginMode, toggleLoginMode] = useAuthStatusToggle(true);
+    const [isLoginMode, toggleLoginMode] = useToggle(true);
 
     const [authState, inputChangeHandler, setAuthFormData] =
-        useAuthForm(authLoginState);
+        useForm(authLoginState);
 
     const submitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
         evt.preventDefault();
@@ -100,8 +100,7 @@ const Auth: React.FC = () => {
                 <Button disabled={!authState.formIsValid} type="submit">
                     {isLoginMode ? 'LOGIN' : 'SIGNUP'}
                 </Button>
-
-                <p>Signup instead?</p>
+                <br />
                 <Button inverse onClick={toggleLoginMode} type="button">
                     SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
                 </Button>

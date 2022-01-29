@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-const useToggle = (initState: boolean = false) => {
+const useToggle = (initState: boolean = false): [boolean, () => void] => {
     const [state, setState] = useState(initState);
 
     const toggleStateHandler = useCallback(
@@ -8,7 +8,7 @@ const useToggle = (initState: boolean = false) => {
         []
     );
 
-    return [state, toggleStateHandler] as const;
+    return [state, toggleStateHandler];
 };
 
 export default useToggle;
