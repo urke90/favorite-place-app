@@ -1,4 +1,4 @@
-import usePlaceForm from 'hooks/use-form';
+import useForm from 'hooks/use-form';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
@@ -26,9 +26,11 @@ const newPlaceInitState: FormState = {
 };
 
 const NewPlace: React.FC = () => {
-    const [newPlaceState, inputChangeHandler] = usePlaceForm(newPlaceInitState);
+    const [newPlaceState, inputChangeHandler] = useForm(newPlaceInitState);
 
-    const newPlaceSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
+    const newPlaceSubmitHandler = (
+        evt: React.FormEvent<HTMLFormElement>
+    ): void => {
         evt.preventDefault();
     };
 

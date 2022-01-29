@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import usePlaceForm from 'hooks/use-form';
+import useForm from 'hooks/use-form';
 import { PlacesState } from 'models/places/places';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
@@ -13,10 +13,6 @@ import './PlaceForm.css';
  * this apporach should be fine for now until Node BE and DB is introduced.
  * when BE is is finished we will have async call and we should have function that will set input values in place form reducer
  * we should also have load spinner and error msg and show form ONLY if we have form
- */
-
-/**
- * Gatsby i netlify za CV
  */
 
 const DUMMY_PLACES: PlacesState[] = [
@@ -53,7 +49,7 @@ const UpdatePlace: React.FC = () => {
 
     const placeToUpdate = DUMMY_PLACES.find((place) => place.id === placeId);
 
-    const [updatePlaceState, inputChangeHandler] = usePlaceForm({
+    const [updatePlaceState, inputChangeHandler] = useForm({
         inputs: {
             title: {
                 value: placeToUpdate?.title || '',

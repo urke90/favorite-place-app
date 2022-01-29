@@ -7,14 +7,14 @@ enum ReducerActionType {
     SET_DATA = 'SET_DATA'
 }
 
-type Actions =
+type ActionsType =
     | {
           type: ReducerActionType.INPUT_CHANGE;
           payload: { id: string; value: string; isValid: boolean };
       }
     | { type: ReducerActionType.SET_DATA; payload: { inputs: FormState } };
 
-const placeFormReducer = (state: FormState, action: Actions) => {
+const placeFormReducer = (state: FormState, action: ActionsType) => {
     let newState: FormState;
 
     switch (action.type) {
@@ -51,11 +51,17 @@ const placeFormReducer = (state: FormState, action: Actions) => {
     }
 };
 
-const useForm = (stateSchema: FormState) => {
+const useForm = (
+    stateSchema: FormState
+): [
+    FormState,
+    (id: string, value: string, isValid: boolean) => void,
+    (inputs: FormState) => void
+] => {
     const [placeState, dispatch] = useReducer(placeFormReducer, stateSchema);
 
     const inputChangeHandler = useCallback(
-        (id: string, value: string, isValid: boolean) => {
+        (id: string, value: string, isValid: boolean): void => {
             dispatch({
                 type: ReducerActionType.INPUT_CHANGE,
                 payload: { id, value, isValid }
@@ -64,11 +70,11 @@ const useForm = (stateSchema: FormState) => {
         []
     );
 
-    const setFormData = useCallback((inputs: FormState) => {
+    const setFormData = useCallback((inputs: FormState): void => {
         dispatch({ type: ReducerActionType.SET_DATA, payload: { inputs } });
     }, []);
 
-    return [placeState, inputChangeHandler, setFormData] as const;
+    return [placeState, inputChangeHandler, setFormData];
 };
 
 export default useForm;
