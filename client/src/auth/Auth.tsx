@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import useForm from 'hooks/use-form';
 import useToggle from 'hooks/use-toggle';
+import useAuth from 'hooks/use-auth';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
@@ -51,6 +52,8 @@ const Auth: React.FC = () => {
     const [authState, inputChangeHandler, setAuthFormData] =
         useForm(authLoginState);
 
+    const { onLogin } = useAuth();
+
     const submitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
         evt.preventDefault();
     };
@@ -97,7 +100,11 @@ const Auth: React.FC = () => {
                 onInputChange={inputChangeHandler}
             />
             <div className="center column">
-                <Button disabled={!authState.formIsValid} type="submit">
+                <Button
+                    onClick={onLogin}
+                    disabled={!authState.formIsValid}
+                    type="submit"
+                >
                     {isLoginMode ? 'LOGIN' : 'SIGNUP'}
                 </Button>
                 <br />
@@ -110,3 +117,8 @@ const Auth: React.FC = () => {
 };
 
 export default Auth;
+
+/**
+ * figure out logic for login and signup handler
+ *  ************* or the same function can be used for both but handle this on BE?!?!?!?
+ */

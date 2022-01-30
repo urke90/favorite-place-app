@@ -11,11 +11,12 @@ import { AuthContext } from 'context/AuthContext';
 
 const useAuth = () => {
     const auth = useContext(AuthContext);
-    console.log('auth', auth);
 
     if (!auth) throw new Error('Error with Auth and AuthContext!');
 
-    return auth;
+    const { isAuth, onLogin, onLogout } = auth;
+
+    return { isAuth, onLogin, onLogout };
 };
 
 export default useAuth;
