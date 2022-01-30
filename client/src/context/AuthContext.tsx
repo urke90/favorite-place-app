@@ -1,31 +1,35 @@
-import { createContext, useCallback } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import useToggle from 'hooks/use-toggle';
+
+/**
+ * (value: React.SetStateAction<boolean>) => void; ---> pogledati slucaj kada imamo handler koji menja state, kako je najbolje uradit typescript za function
+ */
 
 interface AuthContext {
     isAuth: boolean;
-    login: () => void;
-    logout: () => void;
+    onLogin: () => void;
+    onLogout: () => void;
 }
 
 const authState = {
     isAuth: false,
-    login: () => {},
-    logout: () => {}
+    onLogin: () => {},
+    onLogout: () => {}
 };
 
 export const AuthContext = createContext<AuthContext>(authState);
 
 const AuthContextProvider: React.FC = ({ children }) => {
-    const [isAuth, toggleAuthMode] = useToggle(false);
+    const [isAuth, setAuthMode] = useState(false);
 
-    const loginHandler = useCallback(() => toggleAuthMode(), []);
+    const loginHandler = useCallback(() => setAuthMode(true), []);
 
-    const logoutHandler = useCallback(() => toggleAuthMode(), []);
+    const logoutHandler = useCallback(() => setAuthMode(false), []);
 
     const value: AuthContext = {
         isAuth,
-        login: loginHandler,
-        logout: logoutHandler
+        onLogin: loginHandler,
+        onLogout: logoutHandler
     };
 
     return (
