@@ -1,5 +1,5 @@
 import { createContext, useCallback, useState } from 'react';
-import useToggle from 'hooks/use-toggle';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * (value: React.SetStateAction<boolean>) => void; ---> pogledati slucaj kada imamo handler koji menja state, kako je najbolje uradit typescript za function
@@ -21,10 +21,17 @@ export const AuthContext = createContext<AuthContext>(authState);
 
 const AuthContextProvider: React.FC = ({ children }) => {
     const [isAuth, setAuthMode] = useState(false);
+    const navigate = useNavigate();
 
-    const loginHandler = useCallback(() => setAuthMode(true), []);
+    const loginHandler = useCallback(() => {
+        setAuthMode(true);
+        navigate('/', { replace: true });
+    }, []);
 
-    const logoutHandler = useCallback(() => setAuthMode(false), []);
+    const logoutHandler = useCallback(() => {
+        setAuthMode(false);
+        navigate('/auth', { replace: true });
+    }, []);
 
     const value: AuthContext = {
         isAuth,

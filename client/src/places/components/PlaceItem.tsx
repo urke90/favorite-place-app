@@ -1,6 +1,5 @@
-import { useState } from 'react';
-
 import useToggle from 'hooks/use-toggle';
+import useAuth from 'hooks/use-auth';
 import Card from 'shared/components/UI/Card';
 import { PlacesProps } from 'models/places/places';
 import Button from 'shared/components/FormElements/Button';
@@ -18,6 +17,7 @@ const PlaceItem: React.FC<PlacesProps> = ({
 }) => {
     const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
     const [showDeleteModal, toggleDeletePlaceModal] = useToggle(false);
+    const { isAuth } = useAuth();
 
     // add logic for deleting place when we have BE ready
     const deletePlaceHandler = () => {
@@ -73,10 +73,12 @@ const PlaceItem: React.FC<PlacesProps> = ({
                         <Button onClick={toggleGoogleMapHandler} inverse>
                             VIEW ON MAP
                         </Button>
-                        <Button to={`/places/${id}`}>EDIT</Button>
-                        <Button onClick={toggleDeletePlaceModal} danger>
-                            DELETE
-                        </Button>
+                        {isAuth && <Button to={`/places/${id}`}>EDIT</Button>}
+                        {isAuth && (
+                            <Button onClick={toggleDeletePlaceModal} danger>
+                                DELETE
+                            </Button>
+                        )}
                     </div>
                 </Card>
             </li>
