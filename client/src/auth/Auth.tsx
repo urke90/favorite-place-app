@@ -14,6 +14,11 @@ import {
 
 import './Auth.css';
 
+/**
+ * figure out logic for login and signup handler
+ *  ************* or the same function can be used for both but handle this on BE?!?!?!?
+ */
+
 const authLoginState: FormState = {
     inputs: {
         email: {
@@ -117,8 +122,3 @@ const Auth: React.FC = () => {
 };
 
 export default Auth;
-
-/**
- * figure out logic for login and signup handler
- *  ************* or the same function can be used for both but handle this on BE?!?!?!?
- */

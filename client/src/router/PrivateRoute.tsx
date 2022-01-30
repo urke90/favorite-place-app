@@ -1,16 +1,11 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import useAuth from 'hooks/use-auth';
-import React from 'react';
 
-type PrivateRouteProps = {
-    children: React.ReactElement<any, any> | null;
-};
-
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
     const { isAuth } = useAuth();
 
     if (!isAuth) {
-        return <Navigate to="/" />;
+        return <Navigate to="/" replace />;
     }
 
     return children;
