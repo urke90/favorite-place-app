@@ -1,0 +1,21 @@
+1. change app ext to .ts
+2. install @types/node ====>    https://www.npmjs.com/package/@types/node
+3. install @types/express ===> https://www.npmjs.com/package/@types/express ----- radimo sa express-om da imamo i autocomplete i etc.
+4. tsc.config file ====>
+    target ---> es6
+    module: commonjs --- ostaj
+    moduleResolution: node
+5. check best practice for require()/import ====> import express = require('express') || import express from 'express' (REACT)
+
+
+
+
+/************************ EXPRESS REST API ****************************/
+1. mozemo da koristimo default export kao u REACT
+2. pravimo models folder gde cemo imati .ts fajlove za interfface/types itd
+3. DA LI KORISTIMO body-parser || express.json() ?!?!?!?!??!?!??!??!??!?!?!??!?!??!?!??!? *********************
+4. INTALIRATI @types/... pckg za dependencies koje instaliramo
+5. tsconfig ---->
+    outDir ./dist ====> da nam kompajlira fajlove u nov folder a ne u folderu gde su .ts fajlovi
+    rootDir: ./src ===> specify root dir for input files
+6. moze da se napravi src folder gde cemo da mecemo sve fajlove i foldere kao u Reactu
