@@ -1,4 +1,4 @@
-export interface IPlacesState {
+export interface IPlace {
     id: string;
     title: string;
     description: string;

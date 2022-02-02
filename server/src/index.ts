@@ -3,8 +3,14 @@ import cors from 'cors';
 
 /**
  * Routes
+ * DANGER =====>  check diff when importin ()
  */
-import placesRoutes from './routes/places-routes';
+// import placeRoutes from 'routes/places-routes';
+// import userRoutes from './routes/users-routes';
+
+import placeRoutes from './routes/places-routes';
+
+import userRoutes from './routes/users-routes';
 
 const app = express();
 
@@ -18,6 +24,7 @@ app.use(
         origin: 'http://localhost:3000'
     })
 );
-app.use('/api/places', placesRoutes);
+app.use('/api/places', placeRoutes);
+app.use('/api/users', userRoutes);
 
 app.listen(5000);
