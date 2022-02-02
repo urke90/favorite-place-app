@@ -1,10 +1,16 @@
 import { Router } from 'express';
 
-import { IPlacesState } from 'models/places/places';
+import { IPlace } from 'models/place/place';
+// import { IUser } from 'models/user/user';
 
 const router = Router();
 
-const DUMMY_PLACES: IPlacesState[] = [
+/**
+ * THE ROUTE ALREADY STARTS WITH /api/places defined in index.ts
+ * when adding extra path DON'T add /api/places since it's already accounted in
+ */
+
+const DUMMY_PLACES: IPlace[] = [
     {
         id: 'p1',
         title: 'Empire State Building',
@@ -39,7 +45,24 @@ router.get('/:placeId', (req, res, next) => {
     const place = DUMMY_PLACES.find((p) => p.id === placeId);
 
     // throw error if place is not found
-    if (!place) throw new Error(`Place with id: ${placeId} not found!!!`);
+    if (!place) {
+        return res.status(404).json({
+            message: "Couldn't find place for the provided PLACE id."
+        });
+    }
+
+    res.json({ place });
+});
+
+router.get('/user/:userId', (req, res, next) => {
+    const userId: string = req.params.userId;
+
+    const place = DUMMY_PLACES.find((p) => p.creatorId === userId);
+    if (!place) {
+        return res.status(404).json({
+            message: "Couldn't find place for the provided USER id."
+        });
+    }
 
     res.json({ place });
 });
