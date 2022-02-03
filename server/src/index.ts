@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 
 /**
@@ -26,5 +26,15 @@ app.use(
 );
 app.use('/api/places', placeRoutes);
 app.use('/api/users', userRoutes);
+
+const errorMiddleWare: ErrorRequestHandler = (error, req, res, next) => {
+    if (res.headersSent) return next(error);
+
+    res.status(error.errorCode || 500).json({
+        message: error.message || 'An unknown error occured!!!'
+    });
+};
+
+app.use(errorMiddleWare);
 
 app.listen(5000);
