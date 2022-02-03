@@ -1,8 +1,8 @@
 export interface IPlace {
-    id: string;
+    id?: string;
     title: string;
     description: string;
-    imageUrl: string;
+    imageUrl?: string;
     address: string;
     location: ILocation;
     creatorId: string;

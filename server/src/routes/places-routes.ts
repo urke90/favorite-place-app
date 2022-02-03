@@ -2,7 +2,8 @@ import { Router } from 'express';
 
 import {
     getPlaceByPlaceId,
-    getPlaceByUserId
+    getPlaceByUserId,
+    createPlace
 } from '../controllers/places-controllers';
 
 const router = Router();
@@ -16,5 +17,7 @@ const router = Router();
 router.get('/:placeId', getPlaceByPlaceId);
 
 router.get('/user/:userId', getPlaceByUserId);
+
+router.post('/', createPlace);
 
 export default router;
