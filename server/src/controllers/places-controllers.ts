@@ -131,4 +131,5 @@ export const deletePlaceById = (
     const placeId: string = req.params.placeId;
 
     DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+    res.status(200).json({ message: 'Place deleted!' });
 };
