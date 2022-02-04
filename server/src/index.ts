@@ -9,8 +9,8 @@ import cors from 'cors';
 // import userRoutes from './routes/users-routes';
 
 import placeRoutes from './routes/places-routes';
-
 import userRoutes from './routes/users-routes';
+import HttpError from './models/error/http-error';
 
 const app = express();
 
@@ -25,7 +25,12 @@ app.use(
     })
 );
 app.use('/api/places', placeRoutes);
-app.use('/api/users', userRoutes);
+// app.use('/api/users', userRoutes);
+
+app.use(() => {
+    const error = new HttpError("Couldn't find this route", 404);
+    throw error;
+});
 
 const errorMiddleWare: ErrorRequestHandler = (error, req, res, next) => {
     if (res.headersSent) return next(error);
