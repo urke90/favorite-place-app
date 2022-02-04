@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { IPlace } from '../models/place/place';
 import HttpError from '../models/error/http-error';
 
-const DUMMY_PLACES: IPlace[] = [
+let DUMMY_PLACES: IPlace[] = [
     {
         id: 'p1',
         title: 'Empire State Building',
@@ -89,6 +89,7 @@ export const createPlace = (
         id: uuidv4(),
         title,
         description,
+        imageUrl: '',
         location,
         address,
         creatorId
@@ -97,4 +98,38 @@ export const createPlace = (
     DUMMY_PLACES.push(newPlace);
 
     res.status(201).json({ place: newPlace });
+};
+
+export const updatePlaceById = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const placeId: string = req.params.placeId;
+
+    const { title, description } = req.body;
+
+    const placeToUpdate = DUMMY_PLACES.find((p) => p.id === placeId);
+
+    if (!placeToUpdate) return;
+
+    placeToUpdate.title = title;
+    placeToUpdate.description = description;
+
+    const updatePlaceIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+
+    DUMMY_PLACES[updatePlaceIndex] = placeToUpdate;
+
+    res.status(200).json({ place: placeToUpdate });
+};
+
+export const deletePlaceById = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const placeId: string = req.params.placeId;
+
+    DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+    res.status(200).json({ message: 'Place deleted!' });
 };
