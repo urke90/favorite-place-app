@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import {
     getPlaceByPlaceId,
-    getPlaceByUserId,
+    getPlacesByUserId,
     createPlace,
     updatePlaceById,
     deletePlaceById
@@ -18,7 +18,7 @@ const router = Router();
 
 router.get('/:placeId', getPlaceByPlaceId);
 
-router.get('/user/:userId', getPlaceByUserId);
+router.get('/user/:userId', getPlacesByUserId);
 
 router.post('/', createPlace);
 
