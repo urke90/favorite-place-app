@@ -55,26 +55,26 @@ export const getPlaceByPlaceId = (
     res.json({ place });
 };
 
-export const getPlaceByUserId = (
+export const getPlacesByUserId = (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     const userId: string = req.params.userId;
 
-    const place = DUMMY_PLACES.find((p) => p.creatorId === userId);
+    const places = DUMMY_PLACES.filter((p) => p.creatorId === userId);
 
-    if (!place) {
+    if (!places || places.length === 0) {
         // CAN BE DONE IN THIS WAY, BUT WILL USE ERROR CLASS LIKE ^^^
         // return res.status(404).json({
         //     message: "Couldn't find place for the provided USER id."
         // });
         return next(
-            new HttpError("Couldn't find place for the provided USER id.", 404)
+            new HttpError("Couldn't find places for the provided USER id.", 404)
         );
     }
 
-    res.json({ place });
+    res.json({ places });
 };
 
 export const createPlace = (
