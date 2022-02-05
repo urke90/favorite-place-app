@@ -25,7 +25,7 @@ app.use(
     })
 );
 app.use('/api/places', placeRoutes);
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(() => {
     const error = new HttpError("Couldn't find this route", 404);
