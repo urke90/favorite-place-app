@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+
+import { validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 
 import { IPlace } from '../models/place/place';
@@ -85,6 +87,15 @@ export const createPlace = (
     const { title, description, location, address, creatorId }: IPlace =
         req.body;
 
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        throw new HttpError(
+            'invalid inputs passed, please check your data',
+            422
+        );
+    }
+
     const newPlace: IPlace = {
         id: uuidv4(),
         title,
@@ -105,6 +116,15 @@ export const updatePlaceById = (
     res: Response,
     next: NextFunction
 ) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        throw new HttpError(
+            'invalid inputs passed, please check your data',
+            422
+        );
+    }
+
     const placeId: string = req.params.placeId;
 
     const { title, description } = req.body;
@@ -129,6 +149,12 @@ export const deletePlaceById = (
     next: NextFunction
 ) => {
     const placeId: string = req.params.placeId;
+
+    const placeToDelete = DUMMY_PLACES.find((p) => p.id === placeId);
+
+    if (!placeToDelete) {
+        throw new HttpError('Place to delete not found', 404);
+    }
 
     DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
     res.status(200).json({ message: 'Place deleted!' });
