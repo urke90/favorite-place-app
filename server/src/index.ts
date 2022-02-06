@@ -42,4 +42,4 @@ const errorMiddleWare: ErrorRequestHandler = (error, req, res, next) => {
 
 app.use(errorMiddleWare);
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);

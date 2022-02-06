@@ -6,7 +6,8 @@
         "ts": "node -r ts-node/register"
     },
     "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "MAPBOX_API_TOKEN": "pk.eyJ1IjoidXJrZTkwIiwiYSI6ImNreWl2ZHV0NzIxbHQydnVyaW9pb2FiaGoifQ.QboaTbQ00h2Q2NKJ8t4vkA"
     },
     "ext": "js,json,ts"
 }

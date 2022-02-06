@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-
 import { validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 
-import { IPlace } from '../models/place/place';
+import { IPlace, ILocation } from '../models/place/place';
 import HttpError from '../models/error/http-error';
+import { getAddressGeoLocation } from '../utils/mapLocation';
 
 let DUMMY_PLACES: IPlace[] = [
     {
@@ -79,7 +79,7 @@ export const getPlacesByUserId = (
     res.json({ places });
 };
 
-export const createPlace = (
+export const createPlace = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -96,12 +96,19 @@ export const createPlace = (
         );
     }
 
+    const locationCordinates: ILocation = (await getAddressGeoLocation(
+        address
+    )) || {
+        lat: -78.91973,
+        lng: 36.0094
+    };
+
     const newPlace: IPlace = {
         id: uuidv4(),
         title,
         description,
         imageUrl: '',
-        location,
+        location: locationCordinates,
         address,
         creatorId
     };
