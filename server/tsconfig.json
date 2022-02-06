@@ -31,9 +31,9 @@
         "paths": {
             "../controllers/*": ["controllers/*"],
             "../models/*": ["models/*"],
-            "../routes": ["routes/"]
+            "../routes": ["routes/"],
+            "../utils/*": ["./src/utils/*"]
             // "helpers/*": [ "./src/helpers/*" ],
-            // "utils/*": [ "./src/utils/*" ],
             // "components/*": [ "./src/components/*" ],
             // "interfaces/*": [ "./src/interfaces/*" ],
             // "middlewares/*": [ "./src/middlewares/*" ],
