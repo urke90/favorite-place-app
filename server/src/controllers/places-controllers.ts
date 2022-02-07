@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { v4 as uuidv4 } from 'uuid';
 
 import { IPlace, ILocation } from '../types/place/place';
 import HttpError from '../types/error/http-error';
@@ -36,14 +35,25 @@ let DUMMY_PLACES: IPlace[] = [
     }
 ];
 
-export const getPlaceByPlaceId = (
+export const getPlaceByPlaceId = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     const placeId: string = req.params.placeId;
+    let place;
 
-    const place = DUMMY_PLACES.find((p) => p.id === placeId);
+    try {
+        /**
+         *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
+         */
+        place = await Place.findById(placeId);
+    } catch (err) {
+        // throw error here if request/response to DB goes wrong
+        return next(
+            new HttpError("Something went wrong, couldn't find a place", 500)
+        );
+    }
 
     // throw error if place is not found
     if (!place) {
@@ -55,7 +65,7 @@ export const getPlaceByPlaceId = (
         );
     }
 
-    res.json({ place });
+    res.json({ place: place.toObject({ getters: true }) });
 };
 
 export const getPlacesByUserId = (
@@ -85,8 +95,7 @@ export const createPlace = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { title, description, location, address, creatorId }: IPlace =
-        req.body;
+    const { title, description, address, creatorId }: IPlace = req.body;
 
     const errors = validationResult(req);
 
@@ -115,6 +124,7 @@ export const createPlace = async (
     });
 
     try {
+        // * save() ===  used for saving entry in DB
         await createdPlace.save();
     } catch (err) {
         return next(
