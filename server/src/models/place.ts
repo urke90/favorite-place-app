@@ -44,4 +44,6 @@ const placeSchema = new Schema<IPlace>({
     }
 });
 
-export default mongoose.model('Place', placeSchema);
+const Place = mongoose.model('Place', placeSchema);
+
+export default Place;

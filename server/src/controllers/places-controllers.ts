@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { IPlace, ILocation } from '../types/place/place';
 import HttpError from '../types/error/http-error';
 import { getAddressGeoLocation } from '../utils/mapLocation';
+import Place from '../models/place';
 
 let DUMMY_PLACES: IPlace[] = [
     {
@@ -103,19 +104,25 @@ export const createPlace = async (
         lng: 36.0094
     };
 
-    const newPlace: IPlace = {
-        id: uuidv4(),
+    const createdPlace = new Place({
         title,
         description,
-        imageUrl: '',
+        imageUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
         location: locationCordinates,
         address,
         creatorId
-    };
+    });
 
-    DUMMY_PLACES.push(newPlace);
+    try {
+        await createdPlace.save();
+    } catch (err) {
+        return next(
+            new HttpError('Creating Place failed, pleas try again', 500)
+        );
+    }
 
-    res.status(201).json({ place: newPlace });
+    res.status(201).json({ place: createdPlace });
 };
 
 export const updatePlaceById = (
