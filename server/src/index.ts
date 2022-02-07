@@ -12,7 +12,7 @@ import mongoose, { mongo } from 'mongoose';
 
 import placeRoutes from './routes/places-routes';
 import userRoutes from './routes/users-routes';
-import HttpError from './models/error/http-error';
+import HttpError from './types/error/http-error';
 
 const app = express();
 
