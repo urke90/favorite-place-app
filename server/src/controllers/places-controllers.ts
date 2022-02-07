@@ -68,26 +68,34 @@ export const getPlaceByPlaceId = async (
     res.json({ place: place.toObject({ getters: true }) });
 };
 
-export const getPlacesByUserId = (
+export const getPlacesByUserId = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     const userId: string = req.params.userId;
+    let places;
 
-    const places = DUMMY_PLACES.filter((p) => p.creatorId === userId);
+    try {
+        places = await Place.find({ creatorId: userId });
+    } catch (err) {
+        return next(
+            new HttpError(
+                "Something went wrong. Couldn't find places for the provided USER id.",
+                500
+            )
+        );
+    }
 
     if (!places || places.length === 0) {
-        // CAN BE DONE IN THIS WAY, BUT WILL USE ERROR CLASS LIKE ^^^
-        // return res.status(404).json({
-        //     message: "Couldn't find place for the provided USER id."
-        // });
         return next(
             new HttpError("Couldn't find places for the provided USER id.", 404)
         );
     }
 
-    res.json({ places });
+    res.json({
+        places: places.map((place) => place.toObject({ getters: true }))
+    });
 };
 
 export const createPlace = async (
