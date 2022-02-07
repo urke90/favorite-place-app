@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { validationResult } from 'express-validator';
 
-import HttpError from '../models/error/http-error';
-import { IUser } from 'models/user/user';
+import HttpError from '../types/error/http-error';
+import { IUser } from 'types/user/user';
 
 const DUMMY_USERS: IUser[] = [
     {

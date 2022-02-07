@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 
-import { IPlace, ILocation } from '../models/place/place';
-import HttpError from '../models/error/http-error';
+import { IPlace, ILocation } from '../types/place/place';
+import HttpError from '../types/error/http-error';
 import { getAddressGeoLocation } from '../utils/mapLocation';
 
 let DUMMY_PLACES: IPlace[] = [
