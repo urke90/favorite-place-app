@@ -20,8 +20,22 @@ import User from '../models/user';
 //     }
 // ];
 
-export const getUsers = (req: Request, res: Response, next: NextFunction) => {
-    res.json({ users: 'fasdfads' });
+export const getUsers = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    let users;
+
+    try {
+        users = await User.find({}, '-password');
+    } catch (err) {
+        return next(
+            new HttpError('Fetching users failed, please try again', 500)
+        );
+    }
+
+    res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
 /**
