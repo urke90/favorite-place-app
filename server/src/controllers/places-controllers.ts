@@ -143,7 +143,7 @@ export const createPlace = async (
     res.status(201).json({ place: createdPlace });
 };
 
-export const updatePlaceById = (
+export const updatePlaceById = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -152,27 +152,44 @@ export const updatePlaceById = (
 
     if (!errors.isEmpty()) {
         throw new HttpError(
-            'invalid inputs passed, please check your data',
+            'Invalid inputs passed, please check your data',
             422
         );
     }
 
     const placeId: string = req.params.placeId;
-
     const { title, description } = req.body;
 
-    const placeToUpdate = DUMMY_PLACES.find((p) => p.id === placeId);
+    let place;
 
-    if (!placeToUpdate) return;
+    try {
+        /**
+         *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
+         */
+        place = await Place.findById(placeId);
+    } catch (err) {
+        // throw error here if request/response to DB goes wrong
+        return next(
+            new HttpError("Something went wrong, couldn't find a place", 500)
+        );
+    }
 
-    placeToUpdate.title = title;
-    placeToUpdate.description = description;
+    if (!place) {
+        return next(new HttpError("Can't find place with id", 404));
+    }
 
-    const updatePlaceIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+    place.title = title;
+    place.description = description;
 
-    DUMMY_PLACES[updatePlaceIndex] = placeToUpdate;
+    try {
+        await place.save();
+    } catch (err) {
+        return next(
+            new HttpError("Something went wrong, couldn't find a place", 500)
+        );
+    }
 
-    res.status(200).json({ place: placeToUpdate });
+    res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
 export const deletePlaceById = (
