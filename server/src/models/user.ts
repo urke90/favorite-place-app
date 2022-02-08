@@ -1,12 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
-export interface IUser extends Document {
+export interface IUser {
     name: string;
     email: string;
     password: string;
     avatar: string;
-    places: string;
+    places: Types.ObjectId;
 }
 
 /**
@@ -34,10 +34,13 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true
     },
-    places: {
-        type: String,
-        required: true
-    }
+    places: [
+        {
+            type: Types.ObjectId,
+            required: true,
+            ref: 'Place'
+        }
+    ]
 });
 
 userSchema.plugin(uniqueValidator);

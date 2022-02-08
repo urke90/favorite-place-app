@@ -80,7 +80,7 @@ export const usersSignup = async (
             new HttpError('invalid inputs passed, please check your data', 422)
         );
     }
-    const { name, email, password, places } = req.body;
+    const { name, email, password } = req.body;
     let existingUser;
 
     try {
@@ -100,7 +100,7 @@ export const usersSignup = async (
         email,
         avatar: 'http://*www.w3schools.com/bootstrap/img_avatar3.png',
         password,
-        places
+        places: []
     });
 
     try {
