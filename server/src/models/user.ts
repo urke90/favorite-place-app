@@ -1,11 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
-interface IUser {
-    id: string;
+export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
+    avatar: string;
+    places: string;
 }
 
 /**
@@ -14,7 +15,7 @@ interface IUser {
  * TODO uniqueValidator ===> check how it workd, can we shorthen the code below
  */
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
     name: {
         type: String,
         required: true
