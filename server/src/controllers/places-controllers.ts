@@ -192,19 +192,40 @@ export const updatePlaceById = async (
     res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
-export const deletePlaceById = (
+export const deletePlaceById = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     const placeId: string = req.params.placeId;
 
-    const placeToDelete = DUMMY_PLACES.find((p) => p.id === placeId);
+    let place;
 
-    if (!placeToDelete) {
-        throw new HttpError('Place to delete not found', 404);
+    try {
+        /**
+         *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
+         */
+        place = await Place.findById(placeId);
+    } catch (err) {
+        // throw error here if request/response to DB goes wrong
+        return next(
+            new HttpError("Something went wrong, couldn't find a place", 500)
+        );
     }
 
-    DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+    if (!place) {
+        return next(
+            new HttpError("Something went wrong, couldn't find a place", 404)
+        );
+    }
+
+    try {
+        await place.remove();
+    } catch (err) {
+        return next(
+            new HttpError("Something went wrong, couldn't find a place", 500)
+        );
+    }
+
     res.status(200).json({ message: 'Place deleted!' });
 };
