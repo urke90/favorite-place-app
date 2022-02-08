@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 
 import HttpError from '../types/error/http-error';
 import { IUser } from 'types/user/user';
+import User from '../models/user';
 
 const DUMMY_USERS: IUser[] = [
     {
@@ -35,7 +36,7 @@ export const usersLogin = (req: Request, res: Response, next: NextFunction) => {
     res.json({ message: 'Logged in!' });
 };
 
-export const usersSignup = (
+export const usersSignup = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -43,26 +44,39 @@ export const usersSignup = (
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        throw new HttpError(
-            'invalid inputs passed, please check your data',
-            422
+        return next(
+            new HttpError('invalid inputs passed, please check your data', 422)
         );
     }
-    const { name, email, password } = req.body;
+    const { name, email, password, places } = req.body;
+    let existingUser;
 
-    const isExistingUser = DUMMY_USERS.find((u) => u.email === email);
+    try {
+        existingUser = await User.findOne({ email }).exec();
+    } catch (err) {
+        return next(new HttpError('Signup failed, please try again', 500));
+    }
 
-    if (isExistingUser)
-        throw new HttpError('User with this email already exist', 422);
+    if (existingUser) {
+        return next(
+            new HttpError('User exists already, please login instead', 422)
+        );
+    }
 
-    const newUser: IUser = {
-        id: uuidv4(),
+    const createdUser = new User({
         name,
         email,
-        password
-    };
+        avatar: 'http://*www.w3schools.com/bootstrap/img_avatar3.png',
+        password,
+        places
+    });
 
-    DUMMY_USERS.push(newUser);
+    try {
+        // * save() ===  used for saving entry in DB
+        await createdUser.save();
+    } catch (err) {
+        return next(new HttpError('Signup failed, please try again!', 500));
+    }
 
-    res.json({ user: newUser });
+    res.json({ user: createdUser.toObject({ getters: true }) });
 };
