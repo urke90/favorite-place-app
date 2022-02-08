@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 // import { IPlace } from 'types/place/place';
 
@@ -9,7 +9,7 @@ interface IPlace {
     imageUrl: string;
     address: string;
     location: ILocation;
-    creatorId: string;
+    creatorId: Types.ObjectId;
 }
 
 interface ILocation {
@@ -19,6 +19,7 @@ interface ILocation {
 
 /**
  *  creatorId ====> will be replaced with id that mongo provides
+ * TODO <IPlace>  removed as generic from Schema, figure out a way to implement it again
  */
 
 const placeSchema = new Schema<IPlace>({
@@ -39,8 +40,9 @@ const placeSchema = new Schema<IPlace>({
         lng: { type: Number, required: true }
     },
     creatorId: {
-        type: String,
-        required: true
+        type: Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
 });
 
