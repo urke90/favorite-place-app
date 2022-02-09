@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose';
+import mongoose, { Schema, Types, Document } from 'mongoose';
 
 // import { IPlace } from 'types/place/place';
 
@@ -9,7 +9,7 @@ interface IPlace {
     imageUrl: string;
     address: string;
     location: ILocation;
-    creatorId: Types.ObjectId;
+    creatorId: mongoose.Schema.Types.ObjectId;
 }
 
 interface ILocation {
@@ -22,7 +22,7 @@ interface ILocation {
  * TODO <IPlace>  removed as generic from Schema, figure out a way to implement it again
  */
 
-const placeSchema = new Schema<IPlace>({
+const placeSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -40,12 +40,12 @@ const placeSchema = new Schema<IPlace>({
         lng: { type: Number, required: true }
     },
     creatorId: {
-        type: Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     }
 });
 
-const Place = mongoose.model('Place', placeSchema);
+const Place = mongoose.model<IPlace & Document>('Place', placeSchema);
 
 export default Place;
