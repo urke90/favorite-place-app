@@ -6,7 +6,7 @@ export interface IUser {
     email: string;
     password: string;
     avatar: string;
-    places: Types.Array<string>;
+    places: any;
 }
 
 /**
