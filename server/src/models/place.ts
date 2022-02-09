@@ -41,6 +41,7 @@ const placeSchema = new Schema({
     },
     creatorId: {
         type: mongoose.Types.ObjectId,
+
         required: true,
         ref: 'User'
     }

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import mongoose, { startSession } from 'mongoose';
 
+
 // import { IPlace, ILocation } from '../types/place/place';
 import { IPlace, ILocation } from '../models/place';
 import HttpError from '../types/error/http-error';
