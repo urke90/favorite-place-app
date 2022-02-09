@@ -2,17 +2,17 @@ import mongoose, { Schema, Types, Document } from 'mongoose';
 
 // import { IPlace } from 'types/place/place';
 
-interface IPlace {
+export interface IPlace {
     id: string;
     title: string;
     description: string;
     imageUrl: string;
     address: string;
     location: ILocation;
-    creatorId: mongoose.Schema.Types.ObjectId;
+    creatorId: any;
 }
 
-interface ILocation {
+export interface ILocation {
     lat: number;
     lng: number;
 }
@@ -40,7 +40,8 @@ const placeSchema = new Schema({
         lng: { type: Number, required: true }
     },
     creatorId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
+
         required: true,
         ref: 'User'
     }

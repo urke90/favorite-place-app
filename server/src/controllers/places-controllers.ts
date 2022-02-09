@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { startSession } from 'mongoose';
+import mongoose, { startSession } from 'mongoose';
 
-import { IPlace, ILocation } from '../types/place/place';
+
+// import { IPlace, ILocation } from '../types/place/place';
+import { IPlace, ILocation } from '../models/place';
 import HttpError from '../types/error/http-error';
 import { getAddressGeoLocation } from '../utils/mapLocation';
 import Place from '../models/place';
@@ -76,7 +78,7 @@ export const createPlace = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { title, description, address, creatorId }: IPlace = req.body;
+    const { title, description, address, creatorId } = req.body;
 
     const errors = validationResult(req);
 
@@ -196,7 +198,9 @@ export const deletePlaceById = async (
         /**
          *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
          */
-        place = await Place.findById(placeId);
+        place = await Place.findById(placeId).populate('creatorId');
+        console.log('place', place);
+        // res.json({ place });
     } catch (err) {
         // throw error here if request/response to DB goes wrong
         return next(
@@ -211,7 +215,12 @@ export const deletePlaceById = async (
     }
 
     try {
-        await place.remove();
+        const session = await startSession();
+        session.startTransaction();
+        await place.remove({ session });
+        place.creatorId.places.pull(place);
+        await place.creatorId.save({ session });
+        await session.commitTransaction();
     } catch (err) {
         return next(
             new HttpError("Something went wrong, couldn't find a place", 500)
