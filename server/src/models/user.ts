@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose';
+import mongoose, { Schema, Types, Document } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
 export interface IUser {
@@ -6,8 +6,12 @@ export interface IUser {
     email: string;
     password: string;
     avatar: string;
-    places: Types.ObjectId;
+    places: Types.Array<string>;
 }
+
+/**
+ * TODO places: Types.ObjectId; ---> inspect TS with mongoose Types.ObjectID....
+ */
 
 /**
  * have unique email will speed up the query process
@@ -15,7 +19,7 @@ export interface IUser {
  * TODO uniqueValidator ===> check how it workd, can we shorthen the code below
  */
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -36,7 +40,7 @@ const userSchema = new Schema<IUser>({
     },
     places: [
         {
-            type: Types.ObjectId,
+            type: Schema.Types.ObjectId,
             required: true,
             ref: 'Place'
         }
@@ -45,6 +49,6 @@ const userSchema = new Schema<IUser>({
 
 userSchema.plugin(uniqueValidator);
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model<IUser & Document>('User', userSchema);
 
 export default User;

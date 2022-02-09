@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
+import { startSession } from 'mongoose';
 
 import { IPlace, ILocation } from '../types/place/place';
 import HttpError from '../types/error/http-error';
 import { getAddressGeoLocation } from '../utils/mapLocation';
 import Place from '../models/place';
+import User from '../models/user';
 
 export const getPlaceByPlaceId = async (
     req: Request,
@@ -102,9 +104,27 @@ export const createPlace = async (
         creatorId
     });
 
+    let user;
+
     try {
-        // * save() ===  used for saving entry in DB
-        await createdPlace.save();
+        user = await User.findById(creatorId);
+    } catch (err) {
+        return next(
+            new HttpError('Creating Place failed, pleas try again', 500)
+        );
+    }
+
+    if (!user) {
+        return next(new HttpError("Couldn't find user with provided id", 404));
+    }
+
+    try {
+        const session = await startSession();
+        session.startTransaction();
+        await createdPlace.save({ session: session });
+        user.places.push(createdPlace);
+        await user.save({ session });
+        await session.commitTransaction();
     } catch (err) {
         return next(
             new HttpError('Creating Place failed, pleas try again', 500)

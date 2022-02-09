@@ -98,7 +98,7 @@ export const usersSignup = async (
     const createdUser = new User({
         name,
         email,
-        avatar: 'http://*www.w3schools.com/bootstrap/img_avatar3.png',
+        avatar: 'http://www.w3schools.com/bootstrap/img_avatar3.png',
         password,
         places: []
     });
