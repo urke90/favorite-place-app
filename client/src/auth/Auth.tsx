@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import axios from 'axios';
 
 import useForm from 'hooks/use-form';
 import useToggle from 'hooks/use-toggle';
@@ -18,6 +19,14 @@ import './Auth.css';
  * figure out logic for login and signup handler
  *  ************* or the same function can be used for both but handle this on BE?!?!?!?
  */
+
+interface ILoginData {
+    password: string;
+    email: string;
+}
+interface ISignupData extends ILoginData {
+    name: string;
+}
 
 const authLoginState: FormState = {
     inputs: {
@@ -59,8 +68,40 @@ const Auth: React.FC = () => {
 
     const { onLogin } = useAuth();
 
-    const submitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
+    const authSubmitHandler = async (
+        evt: React.FormEvent<HTMLFormElement>
+    ): Promise<any> => {
         evt.preventDefault();
+
+        const { name, email, password } = authState.inputs;
+        let baseUrl = '/api/users';
+        let url = baseUrl + '/login';
+
+        let data: ISignupData | ILoginData = {
+            email: email.value,
+            password: password.value
+        };
+
+        if (!isLoginMode) {
+            url = baseUrl + '/signup';
+            data = {
+                name: name.value,
+                email: email.value,
+                password: password.value
+            };
+        }
+
+        try {
+            const response = await axios.post(url, data);
+            console.log('response', response);
+            if (response.status !== 201) {
+                throw new Error(
+                    'Something went wrong. Please try again later.'
+                );
+            }
+        } catch (err) {
+            console.log('err', err);
+        }
     };
 
     useEffect(() => {
@@ -71,7 +112,7 @@ const Auth: React.FC = () => {
     }, [isLoginMode]);
 
     return (
-        <form className="auth-form" onSubmit={submitHandler}>
+        <form className="auth-form" onSubmit={authSubmitHandler}>
             {!isLoginMode && (
                 <Input
                     id="name"
@@ -105,11 +146,7 @@ const Auth: React.FC = () => {
                 onInputChange={inputChangeHandler}
             />
             <div className="center column">
-                <Button
-                    onClick={onLogin}
-                    disabled={!authState.formIsValid}
-                    type="submit"
-                >
+                <Button disabled={!authState.formIsValid} type="submit">
                     {isLoginMode ? 'LOGIN' : 'SIGNUP'}
                 </Button>
                 <br />
