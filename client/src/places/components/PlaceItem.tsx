@@ -3,7 +3,7 @@ import useAuth from 'hooks/use-auth';
 import Card from 'shared/components/UI/Card';
 import { PlacesProps } from 'models/places/places';
 import Button from 'shared/components/FormElements/Button';
-import Modal from 'shared/components/UI/Modal';
+import Modal from 'shared/components/UI/Modals/Modal';
 import Map from 'shared/components/UI/Map';
 
 import './PlaceItem.css';
