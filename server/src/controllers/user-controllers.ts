@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
 import HttpError from '../types/error/http-error';
-import { IUser } from 'types/user/user';
 import User from '../models/user';
 
+// import { IUser } from 'types/user/user';
 // const DUMMY_USERS: IUser[] = [
 //     {
 //         id: 'u1',
@@ -90,7 +90,7 @@ export const usersSignup = async (
     const createdUser = new User({
         name,
         email,
-        avatar: 'http://www.w3schools.com/bootstrap/img_avatar3.png',
+        image: 'http://www.w3schools.com/bootstrap/img_avatar3.png',
         password,
         places: []
     });

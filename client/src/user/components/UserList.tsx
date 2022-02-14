@@ -7,9 +7,11 @@ import './UserList.css';
 const UserList: React.FC<{ users: UserModel[] }> = ({ users }) => {
     if (users.length === 0) {
         return (
-            <Card className="center">
-                <h2>No users found!</h2>
-            </Card>
+            <div className="center">
+                <Card>
+                    <h2>No users found!</h2>
+                </Card>
+            </div>
         );
     }
 
