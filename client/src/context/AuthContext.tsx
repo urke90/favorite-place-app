@@ -25,12 +25,12 @@ const AuthContextProvider: React.FC = ({ children }) => {
 
     const loginHandler = useCallback(() => {
         setAuthMode(true);
-        // navigate('/', { replace: true });
+        navigate('/', { replace: true });
     }, []);
 
     const logoutHandler = useCallback(() => {
         setAuthMode(false);
-        // navigate('/auth', { replace: true });
+        navigate('/auth', { replace: true });
     }, []);
 
     const value: AuthContext = {

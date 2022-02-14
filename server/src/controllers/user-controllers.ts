@@ -38,10 +38,6 @@ export const getUsers = async (
     res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
-/**
- * ***************************************************************************************************************
- */
-
 export const usersLogin = async (
     req: Request,
     res: Response,
@@ -63,10 +59,6 @@ export const usersLogin = async (
 
     res.json({ message: 'Logged in!' });
 };
-
-/**
- * ***************************************************************************************************************
- */
 
 export const usersSignup = async (
     req: Request,
