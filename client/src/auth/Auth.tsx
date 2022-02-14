@@ -91,21 +91,26 @@ const Auth: React.FC = () => {
             };
         }
 
+        console.log('url', url);
+        console.log('data', data);
+
         try {
             setIsLoading(true);
             const response = await axios.post(url, data);
-            console.log('responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', response);
 
-            if (response.status !== 201) {
+            if (!isLoginMode && response.status !== 201) {
                 throw new Error("Can't create new user");
             }
+            setIsLoading(false);
+            onLogin();
             // CONTINUE HERE
         } catch (err: any) {
             setError(
-                err.message || 'Something went wrong, please try again later!'
+                err.response.data.message ||
+                    'Something went wrong, please try again later!'
             );
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     const closeErrorModal = () => setError(null);
