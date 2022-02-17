@@ -2,9 +2,9 @@ import { Navigate } from 'react-router-dom';
 import useAuth from 'hooks/use-auth';
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-    const { isAuth } = useAuth();
+    const { isLoggedIn } = useAuth();
 
-    if (!isAuth) {
+    if (!isLoggedIn) {
         return <Navigate to="/" replace />;
     }
 

@@ -57,7 +57,10 @@ export const usersLogin = async (
         return next(new HttpError('Invalid credentials', 401));
     }
 
-    res.json({ message: 'Logged in!' });
+    res.json({
+        message: 'Logged in!',
+        user: existingUser.toObject({ getters: true })
+    });
 };
 
 export const usersSignup = async (

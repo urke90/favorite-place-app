@@ -6,39 +6,41 @@ import { useNavigate } from 'react-router-dom';
  */
 
 interface AuthContext {
-    isAuth: boolean;
-    onLogin: () => void;
+    isLoggedIn: boolean;
+    userId: string | null;
+    onLogin: (userId: string) => void;
     onLogout: () => void;
 }
 
 const authState = {
-    isAuth: false,
-    onLogin: () => {},
+    isLoggedIn: false,
+    userId: null,
+    onLogin: (userId: string) => {},
     onLogout: () => {}
 };
 
 export const AuthContext = createContext<AuthContext>(authState);
 
 const AuthContextProvider: React.FC = ({ children }) => {
-    const [isAuth, setAuthMode] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userId, setUserId] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const loginHandler = useCallback(() => {
-        console.log(
-            'logutskajdbhfgadsjkbfadskhjmbfadshjklbgfkljadsbfjklahsdbfklhjbdsa'
-        );
-
-        setAuthMode(true);
+    const loginHandler = useCallback((userId: string) => {
+        setIsLoggedIn(true);
+        setUserId(userId);
         navigate('/', { replace: true });
     }, []);
 
     const logoutHandler = useCallback(() => {
-        setAuthMode(false);
+        setIsLoggedIn(false);
+        setUserId(null);
         navigate('/auth', { replace: true });
     }, []);
 
     const value: AuthContext = {
-        isAuth,
+        isLoggedIn,
+        userId,
         onLogin: loginHandler,
         onLogout: logoutHandler
     };
