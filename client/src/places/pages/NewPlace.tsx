@@ -1,4 +1,5 @@
 import useForm from 'hooks/use-form';
+import useAxios from 'hooks/use-axios';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
@@ -26,12 +27,32 @@ const newPlaceInitState: FormState = {
 };
 
 const NewPlace: React.FC = () => {
+    const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
     const [newPlaceState, inputChangeHandler] = useForm(newPlaceInitState);
 
-    const newPlaceSubmitHandler = (
-        evt: React.FormEvent<HTMLFormElement>
-    ): void => {
+    const newPlaceSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
+        console.log('newPlaceState', newPlaceState);
+
+        /**
+         * title,
+         * description
+         * imageUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
+         * ! locationCordinates ----> generated coords on BE side
+         * address
+         * creatorId
+         */
+        console.log('newPlaceState', newPlaceState);
+        const { address, descritpion, title } = newPlaceState.inputs;
+        const data = {
+            title: title.value,
+            descritpion: descritpion.value,
+            address: address.value,
+            creatorId: 'this should be string of userId',
+            imageUrl:
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg'
+        };
     };
 
     return (

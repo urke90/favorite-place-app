@@ -17,7 +17,7 @@ const PlaceItem: React.FC<PlacesProps> = ({
 }) => {
     const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
     const [showDeleteModal, toggleDeletePlaceModal] = useToggle(false);
-    const { isAuth } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     // add logic for deleting place when we have BE ready
     const deletePlaceHandler = () => {
@@ -73,8 +73,10 @@ const PlaceItem: React.FC<PlacesProps> = ({
                         <Button onClick={toggleGoogleMapHandler} inverse>
                             VIEW ON MAP
                         </Button>
-                        {isAuth && <Button to={`/places/${id}`}>EDIT</Button>}
-                        {isAuth && (
+                        {isLoggedIn && (
+                            <Button to={`/places/${id}`}>EDIT</Button>
+                        )}
+                        {isLoggedIn && (
                             <Button onClick={toggleDeletePlaceModal} danger>
                                 DELETE
                             </Button>
