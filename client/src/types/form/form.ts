@@ -1,11 +1,11 @@
-interface FormItem {
+interface IFormItem {
     value: string;
     isValid: boolean;
 }
 
-export interface FormState {
+export interface IFormState {
     inputs: {
-        [key: string]: FormItem;
+        [key: string]: IFormItem;
     };
     formIsValid: boolean;
 }

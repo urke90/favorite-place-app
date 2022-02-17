@@ -1,4 +1,4 @@
-import { FormState } from 'models/form/form';
+import { IFormState } from 'types/form/form';
 
 export interface ILoginData {
     password: string;
@@ -8,7 +8,7 @@ export interface ISignupData extends ILoginData {
     name: string;
 }
 
-export const authLoginState: FormState = {
+export const authLoginState: IFormState = {
     inputs: {
         email: {
             value: '',
@@ -22,7 +22,7 @@ export const authLoginState: FormState = {
     formIsValid: false
 };
 
-export const authSignupState: FormState = {
+export const authSignupState: IFormState = {
     inputs: {
         name: {
             value: '',

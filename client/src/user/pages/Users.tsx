@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import useAxios from 'hooks/use-axios';
-import { UserModel } from 'models/user/userModel';
+import { IUser } from 'types/user/user';
 import UserList from '../components/UserList';
 import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 
 const Users = () => {
     const { isLoading, error, sendRequest, clearErrorHandler } = useAxios();
-    const [users, setUsers] = useState<UserModel[]>([]);
+    const [users, setUsers] = useState<IUser[]>([]);
 
     useEffect(() => {
         const fetchUsers = async () => {

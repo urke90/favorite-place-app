@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import useForm from 'hooks/use-form';
-import { PlacesState } from 'models/places/places';
+import { IPlace } from 'types/places/places';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import Card from 'shared/components/UI/Card';
@@ -15,13 +15,12 @@ import './PlaceForm.css';
  * we should also have load spinner and error msg and show form ONLY if we have form
  */
 
-const DUMMY_PLACES: PlacesState[] = [
+const DUMMY_PLACES: IPlace[] = [
     {
         id: 'p1',
         title: 'Empire State Building',
         description: 'One of the most famous sky scrapers in the world!',
-        imageUrl:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
         address: '20 W 34th St, New York, NY 10001',
         location: {
             lat: 40.7484405,
@@ -33,8 +32,7 @@ const DUMMY_PLACES: PlacesState[] = [
         id: 'p2',
         title: 'Empire State Building',
         description: 'One of the most famous sky scrapers in the world!',
-        imageUrl:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
         address: '20 W 34th St, New York, NY 10001',
         location: {
             lat: 40.7484405,

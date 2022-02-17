@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useForm from 'hooks/use-form';
 import useAxios from 'hooks/use-axios';
 import useAuth from 'hooks/use-auth';
-import { FormState } from 'models/form/form';
+import { IFormState } from 'types/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
@@ -13,7 +13,7 @@ import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 import './PlaceForm.css';
 
 // Define state in component since usePlaceForm needs to be passed state.
-const newPlaceInitState: FormState = {
+const newPlaceInitState: IFormState = {
     inputs: {
         title: {
             value: '',

@@ -1,10 +1,10 @@
 import UserItem from './UserItem';
 
-import { UserModel } from '../../models/user/userModel';
+import { IUser } from '../../types/user/user';
 import Card from 'shared/components/UI/Card';
 import './UserList.css';
 
-const UserList: React.FC<{ users: UserModel[] }> = ({ users }) => {
+const UserList: React.FC<{ users: IUser[] }> = ({ users }) => {
     if (users.length === 0) {
         return (
             <div className="center">

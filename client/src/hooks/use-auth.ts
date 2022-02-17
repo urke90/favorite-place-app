@@ -9,14 +9,17 @@ import { AuthContext } from 'context/AuthContext';
  *
  * */
 
-const useAuth = () => {
+const useAuth = (): {
+    isLoggedIn: boolean;
+    userId: string | null;
+    onLogin: (userId: string) => void;
+    onLogout: () => void;
+} => {
     const auth = useContext(AuthContext);
 
     if (!auth) throw new Error('Error with Auth and AuthContext!');
 
-    const { isLoggedIn, userId, onLogin, onLogout } = auth;
-
-    return { isLoggedIn, userId, onLogin, onLogout };
+    return auth;
 };
 
 export default useAuth;
