@@ -6,7 +6,7 @@ import useAuth from 'hooks/use-auth';
 import useAxios from 'hooks/use-axios';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
-import Modal from 'shared/components/UI/Modals/Modal';
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 import {
     authLoginState,
@@ -54,7 +54,7 @@ const Auth: React.FC = () => {
         }
 
         try {
-            const response = await sendRequest(url, 'POST', data);
+            const response = await sendRequest({ url, method: 'POST', data });
 
             onLogin(response.user.id);
         } catch (err) {}
@@ -69,14 +69,7 @@ const Auth: React.FC = () => {
 
     return (
         <>
-            <Modal
-                showModal={!!error}
-                onCloseModal={clearErrorHandler}
-                header="Error occured!"
-                footer={<Button onClick={clearErrorHandler}>CLOSE</Button>}
-            >
-                <p>{error && error}</p>
-            </Modal>
+            <ErrorModal error={error} onCloseModal={clearErrorHandler} />
             <form className="auth-form" onSubmit={authSubmitHandler}>
                 {isLoading && <LoadingSpinner asOverlay />}
                 {!isLoginMode && (

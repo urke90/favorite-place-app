@@ -6,7 +6,7 @@ import useAuth from 'hooks/use-auth';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
-import Modal from 'shared/components/UI/Modals/Modal';
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
@@ -55,11 +55,11 @@ const NewPlace: React.FC = () => {
         };
 
         try {
-            const response = await sendRequest(
-                '/api/places',
-                'POST',
-                newPlaceData
-            );
+            const response = await sendRequest({
+                url: '/api/places',
+                method: 'POST',
+                data: newPlaceData
+            });
 
             if (response.place) {
                 navigate('/');
@@ -69,14 +69,7 @@ const NewPlace: React.FC = () => {
 
     return (
         <>
-            <Modal
-                showModal={!!error}
-                header="Error occured"
-                onCloseModal={clearErrorHandler}
-                footer={<Button onClick={clearErrorHandler}>CLOSE</Button>}
-            >
-                <p>{error}</p>
-            </Modal>
+            <ErrorModal error={error} onCloseModal={clearErrorHandler} />
             <form className="place-form" onSubmit={newPlaceSubmitHandler}>
                 {isLoading && <LoadingSpinner asOverlay />}
                 <Input

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 // interface IAxiosHook {
 //     error: string | null | undefined;
@@ -16,25 +16,25 @@ import axios, { AxiosError } from 'axios';
  */
 
 const useAxios = () => {
-    const [error, setError] = useState<string | null>();
-    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<null | string>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const sendRequest = useCallback(
-        async (url: string, method = 'GET', dataToSend = null) => {
+        async ({ url, method, data }: AxiosRequestConfig) => {
             setIsLoading(true);
             try {
                 const result = await axios({
-                    method,
                     url,
-                    data: dataToSend
+                    method: method ? method : 'GET',
+                    data: data ? data : null
                 });
                 setIsLoading(false);
                 return result.data;
-            } catch (err: any) {
-                // const error = err as AxiosError;
+            } catch (err) {
+                const error = err as AxiosError;
                 setIsLoading(false);
                 setError(
-                    err.response?.data.message ||
+                    error.response?.data.message ||
                         'Something went wrong, please try later'
                 );
             }
