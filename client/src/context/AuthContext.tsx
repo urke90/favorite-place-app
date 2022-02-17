@@ -24,6 +24,10 @@ const AuthContextProvider: React.FC = ({ children }) => {
     const navigate = useNavigate();
 
     const loginHandler = useCallback(() => {
+        console.log(
+            'logutskajdbhfgadsjkbfadskhjmbfadshjklbgfkljadsbfjklahsdbfklhjbdsa'
+        );
+
         setAuthMode(true);
         navigate('/', { replace: true });
     }, []);

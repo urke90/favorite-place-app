@@ -8,7 +8,7 @@ import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 import Button from 'shared/components/FormElements/Button';
 
 const Users = () => {
-    const { isloading, error, sendRequest, clearErrorHandler } = useAxios();
+    const { isLoading, error, sendRequest, clearErrorHandler } = useAxios();
     const [users, setUsers] = useState<UserModel[]>([]);
 
     useEffect(() => {
@@ -31,8 +31,8 @@ const Users = () => {
             >
                 {error}
             </Modal>
-            {isloading && <LoadingSpinner asOverlay />}
-            {!isloading && users && <UserList users={users} />}
+            {isLoading && <LoadingSpinner asOverlay />}
+            {!isLoading && users && <UserList users={users} />}
         </>
     );
 };

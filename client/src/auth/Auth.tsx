@@ -1,14 +1,19 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 
 import useForm from 'hooks/use-form';
 import useToggle from 'hooks/use-toggle';
 import useAuth from 'hooks/use-auth';
-import { FormState } from 'models/form/form';
+import useAxios from 'hooks/use-axios';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import Modal from 'shared/components/UI/Modals/Modal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
+import {
+    authLoginState,
+    authSignupState,
+    ILoginData,
+    ISignupData
+} from './auth';
 import {
     VALIDATOR_EMAIL,
     VALIDATOR_MINLENGTH,
@@ -17,49 +22,8 @@ import {
 
 import './Auth.css';
 
-interface ILoginData {
-    password: string;
-    email: string;
-}
-interface ISignupData extends ILoginData {
-    name: string;
-}
-
-const authLoginState: FormState = {
-    inputs: {
-        email: {
-            value: '',
-            isValid: false
-        },
-        password: {
-            value: '',
-            isValid: false
-        }
-    },
-    formIsValid: false
-};
-
-const authSignupState: FormState = {
-    inputs: {
-        name: {
-            value: '',
-            isValid: false
-        },
-        email: {
-            value: '',
-            isValid: false
-        },
-        password: {
-            value: '',
-            isValid: false
-        }
-    },
-    formIsValid: false
-};
-
 const Auth: React.FC = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<null | string>(null);
+    const { isLoading, error, sendRequest, clearErrorHandler } = useAxios();
 
     const [isLoginMode, toggleLoginMode] = useToggle(true);
 
@@ -68,15 +32,12 @@ const Auth: React.FC = () => {
 
     const { onLogin } = useAuth();
 
-    const authSubmitHandler = async (
-        evt: React.FormEvent<HTMLFormElement>
-    ): Promise<any> => {
+    const authSubmitHandler = async (evt: React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
         const { name, email, password } = authState.inputs;
         let baseUrl = '/api/users';
-        // let url = baseUrl + '/login';
-        let url = `${baseUrl}/${isLoginMode ? 'login' : 'signup'} `;
+        let url = baseUrl + '/login';
 
         let data: ISignupData | ILoginData = {
             email: email.value,
@@ -84,6 +45,7 @@ const Auth: React.FC = () => {
         };
 
         if (!isLoginMode) {
+            url = baseUrl + '/signup';
             data = {
                 name: name.value,
                 email: email.value,
@@ -91,29 +53,13 @@ const Auth: React.FC = () => {
             };
         }
 
-        console.log('url', url);
-        console.log('data', data);
-
         try {
-            setIsLoading(true);
-            const response = await axios.post(url, data);
+            const response = await sendRequest(url, 'POST', data);
+            console.log('response in Auth', response);
 
-            if (!isLoginMode && response.status !== 201) {
-                throw new Error("Can't create new user");
-            }
-            setIsLoading(false);
             onLogin();
-            // CONTINUE HERE
-        } catch (err: any) {
-            setError(
-                err.response.data.message ||
-                    'Something went wrong, please try again later!'
-            );
-            setIsLoading(false);
-        }
+        } catch (err) {}
     };
-
-    const closeErrorModal = () => setError(null);
 
     useEffect(() => {
         if (isLoginMode) {
@@ -126,9 +72,9 @@ const Auth: React.FC = () => {
         <>
             <Modal
                 showModal={!!error}
-                onCloseModal={closeErrorModal}
+                onCloseModal={clearErrorHandler}
                 header="Error occured!"
-                footer={<Button onClick={closeErrorModal}>CLOSE</Button>}
+                footer={<Button onClick={clearErrorHandler}>CLOSE</Button>}
             >
                 <p>{error && error}</p>
             </Modal>
