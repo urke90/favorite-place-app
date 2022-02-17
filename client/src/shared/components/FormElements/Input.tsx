@@ -1,10 +1,10 @@
 import React, { useReducer, useEffect } from 'react';
-import { inputReducer } from 'reducers/input';
-import { Validators } from 'models/validators/validators';
+import { inputReducer, InputAction } from 'reducers/input';
+import { IValidators } from 'types/validators/validators';
 
 import './Input.css';
 
-interface InputProps {
+interface IInput {
     element: string;
     id: string;
     type?: 'text' | 'email' | 'password';
@@ -12,13 +12,13 @@ interface InputProps {
     rows?: number;
     errorText: string;
     label: string;
-    validators: Validators[];
+    validators: IValidators[];
     onInputChange: (id: string, value: string, isValid: boolean) => void;
     initValue?: string;
     initValid?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({
+const Input: React.FC<IInput> = ({
     element = 'input',
     id,
     type = 'text',
@@ -41,11 +41,15 @@ const Input: React.FC<InputProps> = ({
     const changeHandler: React.ChangeEventHandler<
         HTMLInputElement | HTMLTextAreaElement
     > = (evt) => {
-        dispatch({ type: 'CHANGE', value: evt.target.value, validators });
+        dispatch({
+            type: InputAction.CHANGE,
+            value: evt.target.value,
+            validators
+        });
     };
 
     const touchHandler = () => {
-        dispatch({ type: 'TOUCH', validators });
+        dispatch({ type: InputAction.TOUCH, validators });
     };
 
     useEffect(() => {

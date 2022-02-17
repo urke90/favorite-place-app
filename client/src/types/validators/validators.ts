@@ -1,4 +1,4 @@
-export interface Validators {
+export interface IValidators {
     type: string;
     value?: string;
 }

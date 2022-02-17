@@ -1,20 +1,30 @@
-import { InputReducerState } from 'models/input/input';
-import { Validators } from 'models/validators/validators';
+import { IValidators } from 'types/validators/validators';
 import { validate } from 'util/validatiors';
 
-type ActionType =
-    | { type: 'CHANGE'; value: string; validators: Validators[] }
-    | { type: 'TOUCH'; value?: string; validators: Validators[] };
+interface IInputReducerState {
+    value: string;
+    isValid: boolean;
+    isTouched: boolean;
+}
 
-export const inputReducer = (state: InputReducerState, action: ActionType) => {
+export enum InputAction {
+    CHANGE = 'CHANGE',
+    TOUCH = 'TOUCH'
+}
+
+type Action =
+    | { type: InputAction.CHANGE; value: string; validators: IValidators[] }
+    | { type: InputAction.TOUCH; value?: string; validators: IValidators[] };
+
+export const inputReducer = (state: IInputReducerState, action: Action) => {
     switch (action.type) {
-        case 'CHANGE':
+        case InputAction.CHANGE:
             return {
                 ...state,
                 value: action.value,
                 isValid: validate(action.value, action.validators)
             };
-        case 'TOUCH':
+        case InputAction.TOUCH:
             return {
                 ...state,
                 isTouched: true

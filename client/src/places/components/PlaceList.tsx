@@ -1,10 +1,10 @@
-import { PlacesProps } from 'models/places/places';
+import { IPlace } from 'types/places/places';
 import Card from 'shared/components/UI/Card';
 import PlaceItem from './PlaceItem';
 import Button from 'shared/components/FormElements/Button';
 import './PlaceList.css';
 
-const PlaceList: React.FC<{ items: PlacesProps[] }> = ({ items }) => {
+const PlaceList: React.FC<{ items: IPlace[] }> = ({ items }) => {
     if (items.length === 0) {
         return (
             <div className="place-list center">
@@ -22,7 +22,7 @@ const PlaceList: React.FC<{ items: PlacesProps[] }> = ({ items }) => {
                 <PlaceItem
                     key={place.id}
                     id={place.id}
-                    imageUrl={place.imageUrl}
+                    image={place.image}
                     title={place.title}
                     description={place.description}
                     address={place.address}

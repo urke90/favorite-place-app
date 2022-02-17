@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
  * (value: React.SetStateAction<boolean>) => void; ---> pogledati slucaj kada imamo handler koji menja state, kako je najbolje uradit typescript za function
  */
 
-interface AuthContext {
+interface IAuthContext {
     isLoggedIn: boolean;
     userId: string | null;
     onLogin: (userId: string) => void;
@@ -19,13 +19,12 @@ const authState = {
     onLogout: () => {}
 };
 
-export const AuthContext = createContext<AuthContext>(authState);
+export const AuthContext = createContext<IAuthContext>(authState);
 
 const AuthContextProvider: React.FC = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
     const navigate = useNavigate();
-
 
     const loginHandler = useCallback((userId: string) => {
         setIsLoggedIn(true);
@@ -39,7 +38,7 @@ const AuthContextProvider: React.FC = ({ children }) => {
         navigate('/auth', { replace: true });
     }, []);
 
-    const value: AuthContext = {
+    const value: IAuthContext = {
         isLoggedIn,
         userId,
         onLogin: loginHandler,
