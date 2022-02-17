@@ -17,7 +17,7 @@ import axios, { AxiosError } from 'axios';
 
 const useAxios = () => {
     const [error, setError] = useState<string | null>();
-    const [isloading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const sendRequest = useCallback(
         async (url: string, method = 'GET', dataToSend = null) => {
@@ -43,7 +43,7 @@ const useAxios = () => {
 
     const clearErrorHandler = useCallback(() => setError(null), []);
 
-    return { isloading, error, sendRequest, clearErrorHandler };
+    return { isLoading, error, sendRequest, clearErrorHandler };
 };
 
 export default useAxios;
