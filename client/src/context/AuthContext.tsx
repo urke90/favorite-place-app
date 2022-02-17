@@ -26,6 +26,7 @@ const AuthContextProvider: React.FC = ({ children }) => {
     const [userId, setUserId] = useState<string | null>(null);
     const navigate = useNavigate();
 
+
     const loginHandler = useCallback((userId: string) => {
         setIsLoggedIn(true);
         setUserId(userId);
