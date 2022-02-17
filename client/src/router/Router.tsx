@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Places from 'places/pages/Places';
+import Places from 'places/pages/UserPlaces';
 import UpdatePlace from 'places/pages/UpdatePlace';
 import Users from 'user/pages/Users';
 import NewPlace from 'places/pages/NewPlace';

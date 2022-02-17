@@ -55,11 +55,11 @@ const NewPlace: React.FC = () => {
         };
 
         try {
-            const response = await sendRequest(
-                '/api/places',
-                'POST',
-                newPlaceData
-            );
+            const response = await sendRequest({
+                url: '/api/places',
+                method: 'POST',
+                data: newPlaceData
+            });
 
             if (response.place) {
                 navigate('/');

@@ -54,7 +54,7 @@ const Auth: React.FC = () => {
         }
 
         try {
-            const response = await sendRequest(url, 'POST', data);
+            const response = await sendRequest({ url, method: 'POST', data });
 
             onLogin(response.user.id);
         } catch (err) {}
