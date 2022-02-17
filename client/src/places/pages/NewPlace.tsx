@@ -60,12 +60,23 @@ const NewPlace: React.FC = () => {
                 'POST',
                 newPlaceData
             );
-            navigate('/', { replace: true });
+
+            if (response.place) {
+                navigate('/');
+            }
         } catch (err) {}
     };
 
     return (
         <>
+            <Modal
+                showModal={!!error}
+                header="Error occured"
+                onCloseModal={clearErrorHandler}
+                footer={<Button onClick={clearErrorHandler}>CLOSE</Button>}
+            >
+                <p>{error}</p>
+            </Modal>
             <form className="place-form" onSubmit={newPlaceSubmitHandler}>
                 {isLoading && <LoadingSpinner asOverlay />}
                 <Input

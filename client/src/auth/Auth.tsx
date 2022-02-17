@@ -55,11 +55,8 @@ const Auth: React.FC = () => {
 
         try {
             const response = await sendRequest(url, 'POST', data);
-            console.log('response in Auth', response);
-
 
             onLogin(response.user.id);
-
         } catch (err) {}
     };
 
