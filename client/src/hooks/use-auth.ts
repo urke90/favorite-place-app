@@ -14,9 +14,9 @@ const useAuth = () => {
 
     if (!auth) throw new Error('Error with Auth and AuthContext!');
 
-    const { isLoggedIn, onLogin, onLogout } = auth;
+    const { isLoggedIn, userId, onLogin, onLogout } = auth;
 
-    return { isLoggedIn, onLogin, onLogout };
+    return { isLoggedIn, userId, onLogin, onLogout };
 };
 
 export default useAuth;

@@ -1,8 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+
 import useForm from 'hooks/use-form';
 import useAxios from 'hooks/use-axios';
+import useAuth from 'hooks/use-auth';
 import { FormState } from 'models/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
+import Modal from 'shared/components/UI/Modals/Modal';
+import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
 import './PlaceForm.css';
@@ -27,65 +32,72 @@ const newPlaceInitState: FormState = {
 };
 
 const NewPlace: React.FC = () => {
+    const { userId } = useAuth();
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
     const [newPlaceState, inputChangeHandler] = useForm(newPlaceInitState);
+    const navigate = useNavigate();
 
-    const newPlaceSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
+    const newPlaceSubmitHandler = async (
+        evt: React.FormEvent<HTMLFormElement>
+    ) => {
         evt.preventDefault();
-        console.log('newPlaceState', newPlaceState);
 
         /**
-         * title,
-         * description
-         * imageUrl:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-         * ! locationCordinates ----> generated coords on BE side
-         * address
-         * creatorId
+         * TODO in the data we send later we should provide imageUrl ===   users will upload img!!!
          */
-        console.log('newPlaceState', newPlaceState);
-        const { address, descritpion, title } = newPlaceState.inputs;
-        const data = {
+
+        const { address, description, title } = newPlaceState.inputs;
+        const newPlaceData = {
             title: title.value,
-            descritpion: descritpion.value,
+            description: description.value,
             address: address.value,
-            creatorId: 'this should be string of userId',
-            imageUrl:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg'
+            creatorId: userId
         };
+
+        try {
+            const response = await sendRequest(
+                '/api/places',
+                'POST',
+                newPlaceData
+            );
+            navigate('/', { replace: true });
+        } catch (err) {}
     };
 
     return (
-        <form className="place-form" onSubmit={newPlaceSubmitHandler}>
-            <Input
-                id="title"
-                element="input"
-                type="text"
-                label="Title"
-                errorText="Please enter a valid title"
-                validators={[VALIDATOR_REQUIRE()]}
-                onInputChange={inputChangeHandler}
-            />
-            <Input
-                id="description"
-                element="textarea"
-                label="Description"
-                errorText="Please eneter a valid description"
-                validators={[VALIDATOR_MINLENGTH(5)]}
-                onInputChange={inputChangeHandler}
-            />
-            <Input
-                id="address"
-                element="input"
-                label="Address"
-                errorText="Please enter a valid address"
-                validators={[VALIDATOR_REQUIRE()]}
-                onInputChange={inputChangeHandler}
-            />
-            <Button disabled={!newPlaceState.formIsValid} type="submit">
-                ADD PLACE
-            </Button>
-        </form>
+        <>
+            <form className="place-form" onSubmit={newPlaceSubmitHandler}>
+                {isLoading && <LoadingSpinner asOverlay />}
+                <Input
+                    id="title"
+                    element="input"
+                    type="text"
+                    label="Title"
+                    errorText="Please enter a valid title"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    onInputChange={inputChangeHandler}
+                />
+                <Input
+                    id="description"
+                    element="textarea"
+                    label="Description"
+                    errorText="Please eneter a valid description"
+                    validators={[VALIDATOR_MINLENGTH(5)]}
+                    onInputChange={inputChangeHandler}
+                />
+                <Input
+                    id="address"
+                    element="input"
+                    label="Address"
+                    errorText="Please enter a valid address"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    onInputChange={inputChangeHandler}
+                />
+                <Button disabled={!newPlaceState.formIsValid} type="submit">
+                    ADD PLACE
+                </Button>
+            </form>
+        </>
     );
 };
 

@@ -21,17 +21,18 @@ const useAxios = () => {
 
     const sendRequest = useCallback(
         async (url: string, method = 'GET', dataToSend = null) => {
+            setIsLoading(true);
             try {
                 const result = await axios({
                     method,
                     url,
                     data: dataToSend
                 });
-                console.log('result USEAXIOS HOOK', result);
                 setIsLoading(false);
                 return result.data;
             } catch (err: any) {
                 // const error = err as AxiosError;
+                setIsLoading(false);
                 setError(
                     err.response?.data.message ||
                         'Something went wrong, please try later'

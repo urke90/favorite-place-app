@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import mongoose, { startSession } from 'mongoose';
 
-
 // import { IPlace, ILocation } from '../types/place/place';
 import { IPlace, ILocation } from '../models/place';
 import HttpError from '../types/error/http-error';
@@ -111,9 +110,7 @@ export const createPlace = async (
     try {
         user = await User.findById(creatorId);
     } catch (err) {
-        return next(
-            new HttpError('Creating Place failed, pleas try again', 500)
-        );
+        return next(new HttpError('User not found in create place ctrl', 500));
     }
 
     if (!user) {
@@ -128,6 +125,7 @@ export const createPlace = async (
         await user.save({ session });
         await session.commitTransaction();
     } catch (err) {
+        console.log('err creating place NODE', err);
         return next(
             new HttpError('Creating Place failed, pleas try again', 500)
         );

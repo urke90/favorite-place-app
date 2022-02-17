@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types, Document } from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
+// import uniqueValidator from 'mongoose-unique-validator';
 
 export interface IUser {
     name: string;
@@ -47,7 +47,7 @@ const userSchema = new Schema({
     ]
 });
 
-userSchema.plugin(uniqueValidator);
+// userSchema.plugin(uniqueValidator);
 
 const User = mongoose.model<IUser & Document>('User', userSchema);
 
