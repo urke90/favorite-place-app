@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import useAxios from 'hooks/use-axios';
 import { UserModel } from 'models/user/userModel';
 import UserList from '../components/UserList';
-import Modal from 'shared/components/UI/Modals/Modal';
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
-import Button from 'shared/components/FormElements/Button';
 
 const Users = () => {
     const { isLoading, error, sendRequest, clearErrorHandler } = useAxios();
@@ -23,14 +22,7 @@ const Users = () => {
 
     return (
         <>
-            <Modal
-                showModal={!!error}
-                onCloseModal={clearErrorHandler}
-                header="Error occured!"
-                footer={<Button onClick={clearErrorHandler}>CLOSE</Button>}
-            >
-                {error}
-            </Modal>
+            <ErrorModal error={error} onCloseModal={clearErrorHandler} />
             {isLoading && <LoadingSpinner asOverlay />}
             {!isLoading && users && <UserList users={users} />}
         </>

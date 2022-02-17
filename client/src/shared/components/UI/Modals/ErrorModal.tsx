@@ -1,20 +1,22 @@
-// import Modal from './Modal';
-// import Button from 'shared/components/FormElements/Button';
+import Modal from './Modal';
+import Button from 'shared/components/FormElements/Button';
 
-// interface IErrorModalProps {}
+interface IErrorModal {
+    error: string | null | undefined;
+    onCloseModal: () => void;
+}
 
-// const ErrorModal: React.FC = ({ onCloseModal, error }) => {
-//     return (
-//         <Modal
-//             onCloseModal={onCloseModal}
-//             header="An Error Occurred!"
-//             showModal={!!error}
-//             footer={<Button onClick={onCloseModal}>Okay</Button>}
-//         >
-//             <p>{error}</p>
-//         </Modal>
-//     );
-// };
+const ErrorModal: React.FC<IErrorModal> = ({ onCloseModal, error }) => {
+    return (
+        <Modal
+            onCloseModal={onCloseModal}
+            header="An Error Occurred!"
+            showModal={!!error}
+            footer={<Button onClick={onCloseModal}>Okay</Button>}
+        >
+            <p>{error}</p>
+        </Modal>
+    );
+};
 
-// export default ErrorModal;
-export default {};
+export default ErrorModal;
