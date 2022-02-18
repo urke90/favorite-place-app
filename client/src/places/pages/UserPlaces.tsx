@@ -1,43 +1,38 @@
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
+import useAxios from 'hooks/use-axios';
 import { IPlace } from 'types/places/places';
 import PlaceList from 'places/components/PlaceList';
-
-const DUMMY_PLACES: IPlace[] = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'One of the most famous sky scrapers in the world!',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-        address: '20 W 34th St, New York, NY 10001',
-        location: {
-            lat: 40.7484405,
-            lng: -73.9878584
-        },
-        creatorId: 'u1'
-    },
-    {
-        id: 'p2',
-        title: 'Empire State Building',
-        description: 'One of the most famous sky scrapers in the world!',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-        address: '20 W 34th St, New York, NY 10001',
-        location: {
-            lat: 40.7484405,
-            lng: -73.9878584
-        },
-        creatorId: 'u2'
-    }
-];
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
+import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 
 const Places: React.FC = () => {
+    const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
+    const [places, setPlaces] = useState<IPlace[]>([]);
     const { userId } = useParams<{ userId: string }>();
 
-    const filteredPlaces: IPlace[] = DUMMY_PLACES.filter(
-        (place) => place.creatorId === userId
-    );
+    if (!userId) throw new Error('User Id missing');
 
-    return <PlaceList items={filteredPlaces} />;
+    useEffect(() => {
+        const fetchPlaces = async () => {
+            try {
+                const response = await sendRequest({
+                    url: `/api/places/user/${userId}`
+                });
+                if (response.places) setPlaces(response.places);
+            } catch (err) {}
+        };
+        fetchPlaces();
+    }, [sendRequest, userId]);
+
+    return (
+        <>
+            <ErrorModal error={error} onCloseModal={clearErrorHandler} />
+            {isLoading && <LoadingSpinner asOverlay />}
+            {!isLoading && places && <PlaceList items={places} />}
+        </>
+    );
 };
 
 export default Places;
