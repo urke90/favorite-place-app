@@ -16,7 +16,11 @@ const Users = () => {
                 url: '/api/users'
             });
 
-            setUsers(response.users);
+            if (!response || response.status !== 200) {
+                throw new Error('Error fetching users');
+            }
+
+            setUsers(response.data.users);
         };
 
         fetchUsers();

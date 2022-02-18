@@ -5,8 +5,6 @@ import Button from 'shared/components/FormElements/Button';
 import './PlaceList.css';
 
 const PlaceList: React.FC<{ items: IPlace[] }> = ({ items }) => {
-    console.log('items', items);
-
     if (items.length === 0) {
         return (
             <div className="place-list center">

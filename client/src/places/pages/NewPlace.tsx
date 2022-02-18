@@ -61,9 +61,13 @@ const NewPlace: React.FC = () => {
                 data: newPlaceData
             });
 
-            if (response.place) {
-                navigate('/');
+            if (!response || response.status !== 201) {
+                throw new Error(
+                    'Something went wrong, could not create new place'
+                );
             }
+
+            navigate('/');
         } catch (err) {}
     };
 

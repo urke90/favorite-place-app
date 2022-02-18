@@ -29,7 +29,7 @@ const useAxios = () => {
                     data: data ? data : null
                 });
                 setIsLoading(false);
-                return result.data;
+                return result;
             } catch (err) {
                 const error = err as AxiosError;
                 setIsLoading(false);

@@ -1,13 +1,18 @@
 import { useParams } from 'react-router-dom';
 
 import useForm from 'hooks/use-form';
+import useAxios from 'hooks/use-axios';
 import { IPlace } from 'types/places/places';
+import { IFormState } from 'types/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
 import Card from 'shared/components/UI/Card';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
 import './PlaceForm.css';
+import { useEffect, useState } from 'react';
+import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 
 /**
  * this apporach should be fine for now until Node BE and DB is introduced.
@@ -15,53 +20,71 @@ import './PlaceForm.css';
  * we should also have load spinner and error msg and show form ONLY if we have form
  */
 
-const DUMMY_PLACES: IPlace[] = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'One of the most famous sky scrapers in the world!',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-        address: '20 W 34th St, New York, NY 10001',
-        location: {
-            lat: 40.7484405,
-            lng: -73.9878584
+/**
+ * 1. when page loads we should fecth places with placeId
+ * IF THERE IS NOT PLACE ID WE SHOULD STOP!!!!!!!!!!!!!!!!!!
+ *
+ */
+
+const updatePlaceForm: IFormState = {
+    inputs: {
+        title: {
+            value: '',
+            isValid: false
         },
-        creatorId: 'u1'
+        description: {
+            value: '',
+            isValid: false
+        }
     },
-    {
-        id: 'p2',
-        title: 'Empire State Building',
-        description: 'One of the most famous sky scrapers in the world!',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-        address: '20 W 34th St, New York, NY 10001',
-        location: {
-            lat: 40.7484405,
-            lng: -73.9878584
-        },
-        creatorId: 'u2'
-    }
-];
+    formIsValid: false
+};
+
+interface IUpdatePlaceData {
+    title: string;
+    description: string;
+}
 
 const UpdatePlace: React.FC = () => {
     const { placeId } = useParams<{ placeId: string }>();
+    const [loadedPlace, setloadedPlace] = useState<IPlace | undefined>();
+    const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
+    const [updatePlaceState, inputChangeHandler, setFormData] =
+        useForm(updatePlaceForm);
 
-    const placeToUpdate = DUMMY_PLACES.find((place) => place.id === placeId);
+    if (!placeId) throw new Error('Place ID not available');
 
-    const [updatePlaceState, inputChangeHandler] = useForm({
-        inputs: {
-            title: {
-                value: placeToUpdate?.title || '',
-                isValid: true
-            },
-            description: {
-                value: placeToUpdate?.description || '',
-                isValid: true
-            }
-        },
-        formIsValid: true
-    });
+    useEffect(() => {
+        const fetchPlaces = async () => {
+            try {
+                const response = await sendRequest({
+                    url: `/api/places/${placeId}`
+                });
 
-    if (!placeToUpdate) {
+                if (!response || response.status !== 200) {
+                    throw new Error('Something went wrong. Please try later');
+                }
+
+                setFormData({
+                    inputs: {
+                        title: {
+                            value: response.data.place.title,
+                            isValid: true
+                        },
+                        description: {
+                            value: response.data.place.description,
+                            isValid: true
+                        }
+                    },
+                    formIsValid: false
+                });
+                setloadedPlace(response.data.place);
+            } catch (err) {}
+        };
+        fetchPlaces();
+    }, [placeId, sendRequest, setFormData]);
+
+    if (!isLoading && !loadedPlace && !error) {
         return (
             <div className="center">
                 <Card>
@@ -71,40 +94,66 @@ const UpdatePlace: React.FC = () => {
         );
     }
 
-    const placeUpdateSubmitHandler = (
+    const updatePlaceSubmitHandler = async (
         evt: React.FormEvent<HTMLFormElement>
     ) => {
         evt.preventDefault();
         console.log('updatePlaceState', updatePlaceState.inputs);
+
+        const data: IUpdatePlaceData = {
+            title: updatePlaceState.inputs.title.value,
+            description: updatePlaceState.inputs.description.value
+        };
+
+        try {
+            const response = await sendRequest({
+                url: `/api/places/${placeId}`,
+                method: 'PATCH',
+                data
+            });
+            console.log('response', response);
+        } catch (err) {}
     };
 
     return (
-        <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
-            <Input
-                id="title"
-                label="Title"
-                element="input"
-                type="text"
-                validators={[VALIDATOR_REQUIRE()]}
-                onInputChange={inputChangeHandler}
-                errorText="Please enter a valid title"
-                initValue={updatePlaceState.inputs.title.value}
-                initValid={updatePlaceState.inputs.title.isValid}
-            />
-            <Input
-                id="description"
-                label="Description"
-                element="textarea"
-                validators={[VALIDATOR_MINLENGTH(5)]}
-                onInputChange={inputChangeHandler}
-                errorText="Please enter a valid title"
-                initValue={updatePlaceState.inputs.description.value}
-                initValid={updatePlaceState.inputs.description.isValid}
-            />
-            <Button type="submit" disabled={!updatePlaceState.formIsValid}>
-                UPDATE
-            </Button>
-        </form>
+        <>
+            <ErrorModal error={error} onCloseModal={clearErrorHandler} />
+            {isLoading && <LoadingSpinner asOverlay />}
+            {!isLoading && loadedPlace && (
+                <form
+                    className="place-form"
+                    onSubmit={updatePlaceSubmitHandler}
+                >
+                    <Input
+                        id="title"
+                        label="Title"
+                        element="input"
+                        type="text"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onInputChange={inputChangeHandler}
+                        errorText="Please enter a valid title"
+                        initValue={updatePlaceState.inputs.title.value}
+                        initValid
+                    />
+                    <Input
+                        id="description"
+                        label="Description"
+                        element="textarea"
+                        validators={[VALIDATOR_MINLENGTH(5)]}
+                        onInputChange={inputChangeHandler}
+                        errorText="Please enter a valid title"
+                        initValue={updatePlaceState.inputs.description.value}
+                        initValid
+                    />
+                    <Button
+                        type="submit"
+                        disabled={!updatePlaceState.formIsValid}
+                    >
+                        UPDATE
+                    </Button>
+                </form>
+            )}
+        </>
     );
 };
 
