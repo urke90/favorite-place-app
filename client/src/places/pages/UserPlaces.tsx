@@ -20,7 +20,10 @@ const Places: React.FC = () => {
                 const response = await sendRequest({
                     url: `/api/places/user/${userId}`
                 });
-                if (response.places) setPlaces(response.places);
+                if (!response || response.status !== 200) {
+                    throw new Error('Fetch places not working!');
+                }
+                setPlaces(response.data.places);
             } catch (err) {}
         };
         fetchPlaces();

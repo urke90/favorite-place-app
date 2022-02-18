@@ -56,7 +56,11 @@ const Auth: React.FC = () => {
         try {
             const response = await sendRequest({ url, method: 'POST', data });
 
-            onLogin(response.user.id);
+            if (!response) {
+                throw new Error('Something went wrong, try again later');
+            }
+
+            onLogin(response.data.user.id);
         } catch (err) {}
     };
 
