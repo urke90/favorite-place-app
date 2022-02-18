@@ -6,7 +6,7 @@ export interface IPlace {
     id: string;
     title: string;
     description: string;
-    imageUrl: string;
+    image: string;
     address: string;
     location: ILocation;
     creatorId: any;
@@ -31,7 +31,7 @@ const placeSchema = new Schema({
         type: String,
         required: true
     },
-    imageUrl: {
+    image: {
         type: String,
         required: true
     },
