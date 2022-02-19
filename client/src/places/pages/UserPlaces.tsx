@@ -14,15 +14,24 @@ const Places: React.FC = () => {
 
     if (!userId) throw new Error('User Id missing');
 
+    const deletePlaceHandler = (placeId: string) => {
+        console.log('placeId from deletePlaceHandler', placeId);
+        setPlaces((prevPlaces) =>
+            prevPlaces.filter((place) => place.id !== placeId)
+        );
+    };
+
     useEffect(() => {
         const fetchPlaces = async () => {
             try {
                 const response = await sendRequest({
                     url: `/api/places/user/${userId}`
                 });
+
                 if (!response || response.status !== 200) {
                     throw new Error('Fetch places not working!');
                 }
+
                 setPlaces(response.data.places);
             } catch (err) {}
         };
@@ -33,7 +42,9 @@ const Places: React.FC = () => {
         <>
             <ErrorModal error={error} onCloseModal={clearErrorHandler} />
             {isLoading && <LoadingSpinner asOverlay />}
-            {!isLoading && places && <PlaceList items={places} />}
+            {!isLoading && places && (
+                <PlaceList items={places} onDelete={deletePlaceHandler} />
+            )}
         </>
     );
 };
