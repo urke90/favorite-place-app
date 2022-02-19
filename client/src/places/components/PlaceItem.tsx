@@ -1,31 +1,40 @@
 import useToggle from 'hooks/use-toggle';
+import useAxios from 'hooks/use-axios';
 import useAuth from 'hooks/use-auth';
 import Card from 'shared/components/UI/Card';
 import { IPlace } from 'types/places/places';
 import Button from 'shared/components/FormElements/Button';
 import Modal from 'shared/components/UI/Modals/Modal';
 import Map from 'shared/components/UI/Map';
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
+import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 
 import './PlaceItem.css';
 
-const PlaceItem: React.FC<IPlace> = ({
-    image,
-    title,
-    description,
-    address,
-    id
-}) => {
+const PlaceItem: React.FC<{
+    place: IPlace;
+    onDelete: (placeId: string) => void;
+}> = ({ place: { address, id, title, description, image }, onDelete }) => {
     const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
     const [showDeleteModal, toggleDeletePlaceModal] = useToggle(false);
+    const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
     const { isLoggedIn } = useAuth();
 
-    // add logic for deleting place when we have BE ready
-    const deletePlaceHandler = () => {
-        console.log('DELETED PLACE');
+    const confirmDeletePlaceHandler = async () => {
+        toggleDeletePlaceModal();
+        try {
+            const response = await sendRequest({
+                url: `/api/places/${id}`,
+                method: 'DELETE'
+            });
+
+            onDelete(id);
+        } catch (err) {}
     };
 
     return (
         <>
+            <ErrorModal error={error} onCloseModal={clearErrorHandler} />
             <Modal
                 showModal={showGoogleMap}
                 onCloseModal={toggleGoogleMapHandler}
@@ -48,7 +57,7 @@ const PlaceItem: React.FC<IPlace> = ({
                         <Button inverse onClick={toggleDeletePlaceModal}>
                             CLOSE
                         </Button>
-                        <Button danger onClick={deletePlaceHandler}>
+                        <Button danger onClick={confirmDeletePlaceHandler}>
                             DELETE
                         </Button>
                     </>
@@ -61,6 +70,7 @@ const PlaceItem: React.FC<IPlace> = ({
             </Modal>
             <li className="place-item">
                 <Card className="place-item__content">
+                    {isLoading && <LoadingSpinner asOverlay />}
                     <div className="place-item__image">
                         <img src={image} alt={title} />
                     </div>

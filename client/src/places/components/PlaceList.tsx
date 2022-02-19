@@ -4,7 +4,10 @@ import PlaceItem from './PlaceItem';
 import Button from 'shared/components/FormElements/Button';
 import './PlaceList.css';
 
-const PlaceList: React.FC<{ items: IPlace[] }> = ({ items }) => {
+const PlaceList: React.FC<{
+    items: IPlace[];
+    onDelete: (placeId: string) => void;
+}> = ({ items, onDelete }) => {
     if (items.length === 0) {
         return (
             <div className="place-list center">
@@ -19,16 +22,7 @@ const PlaceList: React.FC<{ items: IPlace[] }> = ({ items }) => {
     return (
         <ul className="place-list">
             {items.map((place) => (
-                <PlaceItem
-                    key={place.id}
-                    id={place.id}
-                    image={place.image}
-                    title={place.title}
-                    description={place.description}
-                    address={place.address}
-                    creatorId={place.creatorId}
-                    location={place.location}
-                />
+                <PlaceItem key={place.id} place={place} onDelete={onDelete} />
             ))}
         </ul>
     );
