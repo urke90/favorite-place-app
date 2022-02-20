@@ -14,11 +14,14 @@ import './PlaceItem.css';
 const PlaceItem: React.FC<{
     place: IPlace;
     onDelete: (placeId: string) => void;
-}> = ({ place: { address, id, title, description, image }, onDelete }) => {
+}> = ({
+    place: { address, id, title, description, image, creatorId },
+    onDelete
+}) => {
     const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
     const [showDeleteModal, toggleDeletePlaceModal] = useToggle(false);
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, userId } = useAuth();
 
     const confirmDeletePlaceHandler = async () => {
         toggleDeletePlaceModal();
@@ -83,10 +86,10 @@ const PlaceItem: React.FC<{
                         <Button onClick={toggleGoogleMapHandler} inverse>
                             VIEW ON MAP
                         </Button>
-                        {isLoggedIn && (
+                        {userId === creatorId && (
                             <Button to={`/places/${id}`}>EDIT</Button>
                         )}
-                        {isLoggedIn && (
+                        {userId === creatorId && (
                             <Button onClick={toggleDeletePlaceModal} danger>
                                 DELETE
                             </Button>
