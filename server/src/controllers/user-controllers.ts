@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
+import bcrypt from 'bcryptjs';
 
 import HttpError from '../types/error/http-error';
 import User from '../models/user';
@@ -53,8 +54,24 @@ export const usersLogin = async (
         return next(new HttpError('Login failed, please try again', 500));
     }
 
-    if (!existingUser || existingUser.password !== password) {
+    if (!existingUser) {
         return next(new HttpError('Invalid credentials', 401));
+    }
+
+    let passwordIsValid = false;
+
+    try {
+        passwordIsValid = await bcrypt.compare(password, existingUser.password);
+    } catch (err) {
+        return next(
+            new HttpError('Could not log you in, check your credentials', 500)
+        );
+    }
+
+    if (!passwordIsValid) {
+        return next(
+            new HttpError('Invalid credentials, could not log you in.', 401)
+        );
     }
 
     res.json({
@@ -90,11 +107,20 @@ export const usersSignup = async (
         );
     }
 
+    let hashedPassword;
+    try {
+        hashedPassword = await bcrypt.hash(password, 12);
+    } catch (err) {
+        return next(
+            new HttpError('Could not create user, please try again', 422)
+        );
+    }
+
     const createdUser = new User({
         name,
         email,
         image: 'http://www.w3schools.com/bootstrap/img_avatar3.png',
-        password,
+        password: hashedPassword,
         places: []
     });
 
