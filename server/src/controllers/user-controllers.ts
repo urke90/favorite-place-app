@@ -1,25 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import HttpError from '../types/error/http-error';
 import User from '../models/user';
-
-// import { IUser } from 'types/user/user';
-// const DUMMY_USERS: IUser[] = [
-//     {
-//         id: 'u1',
-//         name: 'Milos Degenek',
-//         email: 'kurobecalo@gmail.com',
-//         password: 'abc123'
-//     },
-//     {
-//         id: 'u2',
-//         name: 'Nemanja Bjelica',
-//         email: 'bjelica@gmail.com',
-//         password: '123abc'
-//     }
-// ];
 
 export const getUsers = async (
     req: Request,
@@ -131,5 +116,20 @@ export const usersSignup = async (
         return next(new HttpError('Signup failed, please try again!', 500));
     }
 
-    res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+    let token;
+    try {
+        token = jwt.sign(
+            { userId: createdUser.id, email: createdUser.email },
+            'supersecret_dont_share',
+            { expiresIn: '1h' }
+        );
+    } catch (err) {
+        return next(new HttpError('Signup failed, please try again!', 500));
+    }
+
+    res.status(201).json({
+        userId: createdUser.id,
+        email: createdUser.email,
+        token
+    });
 };
