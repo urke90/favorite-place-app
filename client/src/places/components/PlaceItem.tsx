@@ -21,15 +21,21 @@ const PlaceItem: React.FC<{
     const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
     const [showDeleteModal, toggleDeletePlaceModal] = useToggle(false);
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
-    const { isLoggedIn, userId } = useAuth();
+    const { token, userId } = useAuth();
 
     const confirmDeletePlaceHandler = async () => {
         toggleDeletePlaceModal();
         try {
             const response = await sendRequest({
                 url: `/api/places/${id}`,
-                method: 'DELETE'
+                method: 'DELETE',
+                data: null,
+                headers: { Authorization: 'Bearer ' + token }
             });
+
+            if (!response || response.status !== 200) {
+                return;
+            }
 
             onDelete(id);
         } catch (err) {}

@@ -26,8 +26,8 @@ const useAxios = () => {
                 const result = await axios({
                     url,
                     method: method ? method : 'GET',
-                    headers,
-                    data: data ? data : null
+                    data: data ? data : null,
+                    headers
                 });
                 setIsLoading(false);
                 return result;
