@@ -20,12 +20,13 @@ const useAxios = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const sendRequest = useCallback(
-        async ({ url, method, data }: AxiosRequestConfig) => {
+        async ({ url, method, data, headers }: AxiosRequestConfig) => {
             setIsLoading(true);
             try {
                 const result = await axios({
                     url,
                     method: method ? method : 'GET',
+                    headers,
                     data: data ? data : null
                 });
                 setIsLoading(false);
