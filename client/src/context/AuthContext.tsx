@@ -7,39 +7,42 @@ import { useNavigate } from 'react-router-dom';
 
 interface IAuthContext {
     isLoggedIn: boolean;
+    token: string | null;
     userId: string | null;
-    onLogin: (userId: string) => void;
+    onLogin: (userId: string, token: string) => void;
     onLogout: () => void;
 }
 
 const authState = {
     isLoggedIn: false,
     userId: null,
-    onLogin: (userId: string) => {},
+    token: null,
+    onLogin: () => {},
     onLogout: () => {}
 };
 
 export const AuthContext = createContext<IAuthContext>(authState);
 
 const AuthContextProvider: React.FC = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [token, setToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const loginHandler = useCallback((userId: string) => {
-        setIsLoggedIn(true);
+    const loginHandler = useCallback((userId: string, token: string) => {
+        setToken(token);
         setUserId(userId);
         navigate('/', { replace: true });
     }, []);
 
     const logoutHandler = useCallback(() => {
-        setIsLoggedIn(false);
+        setToken(null);
         setUserId(null);
         navigate('/auth', { replace: true });
     }, []);
 
     const value: IAuthContext = {
-        isLoggedIn,
+        isLoggedIn: !!token,
+        token,
         userId,
         onLogin: loginHandler,
         onLogout: logoutHandler
