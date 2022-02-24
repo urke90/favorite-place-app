@@ -60,8 +60,6 @@ const Auth: React.FC = () => {
                 throw new Error('Something went wrong, try again later');
             }
 
-            console.log('response when auth', response);
-
             onLogin(response.data.userId, response.data.token);
         } catch (err) {}
     };

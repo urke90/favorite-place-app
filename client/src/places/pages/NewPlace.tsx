@@ -32,7 +32,7 @@ const newPlaceInitState: IFormState = {
 };
 
 const NewPlace: React.FC = () => {
-    const { userId } = useAuth();
+    const { userId, token } = useAuth();
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
     const [newPlaceState, inputChangeHandler] = useForm(newPlaceInitState);
     const navigate = useNavigate();
@@ -58,7 +58,8 @@ const NewPlace: React.FC = () => {
             const response = await sendRequest({
                 url: '/api/places',
                 method: 'POST',
-                data: newPlaceData
+                data: newPlaceData,
+                headers: { Authorization: 'Bearer ' + token }
             });
 
             if (!response || response.status !== 201) {

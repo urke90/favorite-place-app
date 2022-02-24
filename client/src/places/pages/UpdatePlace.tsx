@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import useForm from 'hooks/use-form';
 import useAxios from 'hooks/use-axios';
+import useAuth from 'hooks/use-auth';
 import { IPlace } from 'types/places/places';
 import { IFormState } from 'types/form/form';
 import Input from 'shared/components/FormElements/Input';
 import Button from 'shared/components/FormElements/Button';
+import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
+import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import Card from 'shared/components/UI/Card';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
 
 import './PlaceForm.css';
-import { useEffect, useState } from 'react';
-import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
-import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 
 /**
  * this apporach should be fine for now until Node BE and DB is introduced.
@@ -46,8 +47,9 @@ interface IUpdatePlaceData {
 }
 
 const UpdatePlace: React.FC = () => {
+    const { token } = useAuth();
     const { placeId } = useParams<{ placeId: string }>();
-    const [loadedPlace, setloadedPlace] = useState<IPlace | undefined>();
+    const [loadedPlace, setloadedPlace] = useState<IPlace>();
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
     const [updatePlaceState, inputChangeHandler, setFormData] =
         useForm(updatePlaceForm);
@@ -98,7 +100,6 @@ const UpdatePlace: React.FC = () => {
         evt: React.FormEvent<HTMLFormElement>
     ) => {
         evt.preventDefault();
-        console.log('updatePlaceState', updatePlaceState.inputs);
 
         const data: IUpdatePlaceData = {
             title: updatePlaceState.inputs.title.value,
@@ -109,9 +110,9 @@ const UpdatePlace: React.FC = () => {
             const response = await sendRequest({
                 url: `/api/places/${placeId}`,
                 method: 'PATCH',
-                data
+                data,
+                headers: { Authorization: 'Bearer ' + token }
             });
-            console.log('response', response);
         } catch (err) {}
     };
 

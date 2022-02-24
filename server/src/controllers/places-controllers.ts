@@ -196,7 +196,6 @@ export const deletePlaceById = async (
          *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
          */
         place = await Place.findById(placeId).populate('creatorId');
-        console.log('place', place);
         // res.json({ place });
     } catch (err) {
         // throw error here if request/response to DB goes wrong

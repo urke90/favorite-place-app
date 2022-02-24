@@ -12,6 +12,7 @@ import { AuthContext } from 'context/AuthContext';
 const useAuth = (): {
     isLoggedIn: boolean;
     userId: string | null;
+    token: string | null;
     onLogin: (userId: string, token: string) => void;
     onLogout: () => void;
 } => {
