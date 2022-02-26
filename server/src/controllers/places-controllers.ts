@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import mongoose, { startSession } from 'mongoose';
+import { IRequestExt } from 'types/custom';
 
-// import { IPlace, ILocation } from '../types/place/place';
 import { IPlace, ILocation } from '../models/place';
 import HttpError from '../types/error/http-error';
 import { getAddressGeoLocation } from '../utils/mapLocation';
@@ -134,7 +134,7 @@ export const createPlace = async (
 };
 
 export const updatePlaceById = async (
-    req: Request,
+    req: IRequestExt,
     res: Response,
     next: NextFunction
 ) => {
@@ -165,7 +165,13 @@ export const updatePlaceById = async (
     }
 
     if (!place) {
-        return next(new HttpError("Can't find place with id", 404));
+        return next(
+            new HttpError('We could not find place, try again later', 500)
+        );
+    }
+
+    if (place.creatorId.toString() !== req.userData!.userId) {
+        return next(new HttpError('You are not allowed to edit place', 401));
     }
 
     place.title = title;
@@ -183,7 +189,7 @@ export const updatePlaceById = async (
 };
 
 export const deletePlaceById = async (
-    req: Request,
+    req: IRequestExt,
     res: Response,
     next: NextFunction
 ) => {
@@ -196,7 +202,6 @@ export const deletePlaceById = async (
          *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
          */
         place = await Place.findById(placeId).populate('creatorId');
-        // res.json({ place });
     } catch (err) {
         // throw error here if request/response to DB goes wrong
         return next(
@@ -207,6 +212,12 @@ export const deletePlaceById = async (
     if (!place) {
         return next(
             new HttpError("Something went wrong, couldn't find a place", 404)
+        );
+    }
+
+    if (place.creatorId.id !== req.userData.userId) {
+        return next(
+            new HttpError('You are not allowed to delete this place!', 401)
         );
     }
 
