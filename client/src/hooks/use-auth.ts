@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 
 import { AuthContext } from 'context/AuthContext';
+import { IAuthContext } from 'context/AuthContext';
 
 /**
  * videti sa nesicem best practice za useAuth
@@ -9,13 +10,7 @@ import { AuthContext } from 'context/AuthContext';
  *
  * */
 
-const useAuth = (): {
-    isLoggedIn: boolean;
-    userId: string | null;
-    token: string | null;
-    onLogin: (userId: string, token: string) => void;
-    onLogout: () => void;
-} => {
+const useAuth = (): IAuthContext => {
     const auth = useContext(AuthContext);
 
     if (!auth) throw new Error('Error with Auth and AuthContext!');
