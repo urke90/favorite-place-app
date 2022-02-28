@@ -31,6 +31,7 @@ const AuthContextProvider: React.FC = ({ children }) => {
     const loginHandler = useCallback((userId: string, token: string) => {
         setToken(token);
         setUserId(userId);
+        localStorage.setItem('userData', JSON.stringify({ userId, token }));
         navigate('/', { replace: true });
     }, []);
 
