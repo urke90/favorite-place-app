@@ -40,7 +40,9 @@ export const usersLogin = async (
     }
 
     if (!existingUser) {
-        return next(new HttpError('Invalid credentials', 401));
+        return next(
+            new HttpError('Invalid credentials, could not log you in.', 403)
+        );
     }
 
     let passwordIsValid = false;
@@ -55,7 +57,7 @@ export const usersLogin = async (
 
     if (!passwordIsValid) {
         return next(
-            new HttpError('Invalid credentials, could not log you in.', 401)
+            new HttpError('Invalid credentials, could not log you in.', 403)
         );
     }
 
