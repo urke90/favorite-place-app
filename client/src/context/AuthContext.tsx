@@ -67,6 +67,7 @@ const AuthContextProvider: React.FC = ({ children }) => {
         navigate('/auth', { replace: true });
     }, []);
 
+    // logout user if token expires
     useEffect(() => {
         if (token && tokenExpirationTime) {
             const remainingTime =
@@ -77,6 +78,25 @@ const AuthContextProvider: React.FC = ({ children }) => {
             clearTimeout(logoutTimer);
         }
     }, [token, tokenExpirationTime, logoutHandler]);
+
+    // Will auto login user if token hasn't expired yet
+    useEffect(() => {
+        const storedUserData = JSON.parse(
+            localStorage.getItem('userData') || '{}'
+        );
+
+        if (
+            storedUserData &&
+            storedUserData.token &&
+            new Date(storedUserData.expiration) > new Date()
+        ) {
+            loginHandler(
+                storedUserData.userId,
+                storedUserData.token,
+                new Date(storedUserData.expiration)
+            );
+        }
+    }, [loginHandler]);
 
     const value: IAuthContext = {
         isLoggedIn: !!token,
