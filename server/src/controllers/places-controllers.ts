@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import mongoose, { startSession } from 'mongoose';
+import { startSession } from 'mongoose';
 import { IRequestExt } from 'types/custom';
 
-import { IPlace, ILocation } from '../models/place';
+import { ILocation } from '../models/place';
 import HttpError from '../types/error/http-error';
 import { getAddressGeoLocation } from '../utils/mapLocation';
 import Place from '../models/place';
@@ -18,9 +18,6 @@ export const getPlaceByPlaceId = async (
     let place;
 
     try {
-        /**
-         *  *findById() ===> used to retrieve document by _id ( mongo DB automatically creates _id )
-         */
         place = await Place.findById(placeId);
     } catch (err) {
         // throw error here if request/response to DB goes wrong
@@ -73,7 +70,7 @@ export const getPlacesByUserId = async (
 };
 
 export const createPlace = async (
-    req: Request,
+    req: IRequestExt,
     res: Response,
     next: NextFunction
 ) => {
@@ -101,13 +98,13 @@ export const createPlace = async (
         image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
         location: locationCordinates,
         address,
-        creatorId
+        creatorId: req.userData.userId
     });
 
     let user;
 
     try {
-        user = await User.findById(creatorId);
+        user = await User.findById(req.userData.userId);
     } catch (err) {
         return next(new HttpError('User not found in create place ctrl', 500));
     }

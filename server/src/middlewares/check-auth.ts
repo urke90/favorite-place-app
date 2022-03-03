@@ -1,9 +1,14 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 
 import HttpError from '../types/error/http-error';
+import { IRequestExt } from 'types/custom';
 
-export const authMiddleware = (req: any, res: Response, next: NextFunction) => {
+export const checkAuth = (
+    req: IRequestExt,
+    res: Response,
+    next: NextFunction
+) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
