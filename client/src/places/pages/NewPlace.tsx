@@ -50,8 +50,7 @@ const NewPlace: React.FC = () => {
         const newPlaceData = {
             title: title.value,
             description: description.value,
-            address: address.value,
-            creatorId: userId
+            address: address.value
         };
 
         try {

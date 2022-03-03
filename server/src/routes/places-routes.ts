@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { Request, Response, NextFunction } from 'express';
-// import { authMiddleware } from '../middlewares/auth';
-import { authMiddleware } from '../middlewares/auth';
+
+import { checkAuth } from '../middlewares/check-auth';
 
 import {
     getPlaceByPlaceId,
@@ -24,7 +23,7 @@ router.get('/:placeId', getPlaceByPlaceId);
 
 router.get('/user/:userId', getPlacesByUserId);
 
-router.use(authMiddleware);
+router.use(checkAuth);
 
 router.post(
     '/',
