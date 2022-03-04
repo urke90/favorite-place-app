@@ -23,6 +23,11 @@ const NavLinks: React.FC = () => {
                     <NavLink to="/places/new">ADD PLACE</NavLink>
                 </li>
             )}
+            {isLoggedIn && (
+                <li>
+                    <NavLink to={`/${userId}/account`}>ACCOUNT</NavLink>
+                </li>
+            )}
             {!isLoggedIn && (
                 <li>
                     <NavLink to="/auth">AUTHENTICATE</NavLink>

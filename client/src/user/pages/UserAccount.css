@@ -1,0 +1,23 @@
+.user-profile {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.user__details {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.user__img {
+    flex-basis: 300px;
+    margin-right: 10px;
+}
+.user__img img {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.user__info {
+    flex-basis: 40%;
+}

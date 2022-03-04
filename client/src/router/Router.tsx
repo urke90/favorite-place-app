@@ -5,6 +5,7 @@ import UpdatePlace from 'places/pages/UpdatePlace';
 import Users from 'user/pages/Users';
 import NewPlace from 'places/pages/NewPlace';
 import Auth from 'auth/Auth';
+import UserAccount from 'user/pages/UserAccount';
 import PrivateRoute from './PrivateRoute';
 
 interface RoutesProps {}
@@ -24,6 +25,14 @@ const Router: React.FC<RoutesProps> = () => {
             />
             <Route path="/places/:placeId" element={<UpdatePlace />} />
             <Route path="/auth" element={<Auth />} />
+            <Route
+                path="/:userId/account"
+                element={
+                    <PrivateRoute>
+                        <UserAccount />
+                    </PrivateRoute>
+                }
+            />
             {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>
     );
