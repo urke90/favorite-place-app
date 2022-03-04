@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 
 import Button from './Button';
-import './ImageUpload.css';
+import './ImagePicker.css';
 
-const ImageUpload = (props: any) => {
+const ImagePicker = (props: any) => {
     const filePickerRef = useRef<HTMLInputElement>(null);
 
     const pickedHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,4 +36,4 @@ const ImageUpload = (props: any) => {
     );
 };
 
-export default ImageUpload;
+export default ImagePicker;
