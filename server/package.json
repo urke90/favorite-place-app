@@ -2,11 +2,11 @@
     "name": "server",
     "version": "1.0.0",
     "description": "",
-    "main": "index.ts",
+    "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon --config nodemon.json src/index.ts",
-        "dev:debug": "nodemon --config nodemon.json --inspect-brk src/index.ts"
+        "dev": "nodemon --config nodemon.json src/index.js",
+        "dev:debug": "nodemon --config nodemon.json --inspect-brk src/index.js"
     },
     "keywords": [],
     "author": "",

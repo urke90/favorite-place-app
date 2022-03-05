@@ -1,14 +1,7 @@
-import mongoose, { Schema, Types, Document } from 'mongoose';
+const mongoose = require('mongoose');
 // import uniqueValidator from 'mongoose-unique-validator';
 
-export interface IUser {
-    name: string;
-    email: string;
-    password: string;
-    image: string;
-    places: any;
-}
-
+const Schema = mongoose.Schema;
 /**
  * TODO places: Types.ObjectId; ---> inspect TS with mongoose Types.ObjectID....
  */
@@ -49,6 +42,4 @@ const userSchema = new Schema({
 
 // userSchema.plugin(uniqueValidator);
 
-const User = mongoose.model<IUser & Document>('User', userSchema);
-
-export default User;
+module.exports = mongoose.model('User', userSchema);

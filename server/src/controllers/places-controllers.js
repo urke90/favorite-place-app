@@ -1,20 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
-import { validationResult } from 'express-validator';
-import { startSession } from 'mongoose';
-import { IRequestExt } from 'types/custom';
+// import { validationResult } from 'express-validator';
+const { validationResult } = require('express-validator');
+// import { startSession } from 'mongoose';
+const { startSession } = require('mongoose');
 
-import { ILocation } from '../models/place';
-import HttpError from '../types/error/http-error';
-import { getAddressGeoLocation } from '../utils/mapLocation';
-import Place from '../models/place';
-import User from '../models/user';
+const HttpError = require('../models/http-error');
+const { getAddressGeoLocation } = require('../utils/mapLocation');
+// import Place from '../models/place';
+const Place = require('../models/place');
+const User = require('../models/user');
 
-export const getPlaceByPlaceId = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    const placeId: string = req.params.placeId;
+exports.getPlaceByPlaceId = async (req, res, next) => {
+    const placeId = req.params.placeId;
     let place;
 
     try {
@@ -39,12 +35,8 @@ export const getPlaceByPlaceId = async (
     res.json({ place: place.toObject({ getters: true }) });
 };
 
-export const getPlacesByUserId = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    const userId: string = req.params.userId;
+exports.getPlacesByUserId = async (req, res, next) => {
+    const userId = req.params.userId;
     let places;
 
     try {
@@ -69,11 +61,7 @@ export const getPlacesByUserId = async (
     });
 };
 
-export const createPlace = async (
-    req: IRequestExt,
-    res: Response,
-    next: NextFunction
-) => {
+exports.createPlace = async (req, res, next) => {
     const { title, description, address, creatorId } = req.body;
 
     const errors = validationResult(req);
@@ -85,9 +73,7 @@ export const createPlace = async (
         );
     }
 
-    const locationCordinates: ILocation = (await getAddressGeoLocation(
-        address
-    )) || {
+    const locationCordinates = (await getAddressGeoLocation(address)) || {
         lat: -78.91973,
         lng: 36.0094
     };
@@ -130,11 +116,7 @@ export const createPlace = async (
     res.status(201).json({ place: createdPlace });
 };
 
-export const updatePlaceById = async (
-    req: IRequestExt,
-    res: Response,
-    next: NextFunction
-) => {
+exports.updatePlaceById = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -144,7 +126,7 @@ export const updatePlaceById = async (
         );
     }
 
-    const placeId: string = req.params.placeId;
+    const placeId = req.params.placeId;
     const { title, description } = req.body;
 
     let place;
@@ -167,7 +149,7 @@ export const updatePlaceById = async (
         );
     }
 
-    if (place.creatorId.toString() !== req.userData!.userId) {
+    if (place.creatorId.toString() !== req.userData.userId) {
         return next(new HttpError('You are not allowed to edit place', 401));
     }
 
@@ -185,12 +167,8 @@ export const updatePlaceById = async (
     res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
-export const deletePlaceById = async (
-    req: IRequestExt,
-    res: Response,
-    next: NextFunction
-) => {
-    const placeId: string = req.params.placeId;
+exports.deletePlaceById = async (req, res, next) => {
+    const placeId = req.params.placeId;
 
     let place;
 
