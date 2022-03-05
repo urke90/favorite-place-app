@@ -1,4 +1,6 @@
 import express, { ErrorRequestHandler } from 'express';
+import fs from 'fs';
+import path from 'path';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
@@ -19,8 +21,8 @@ app.use(
         origin: 'http://localhost:3000'
     })
 );
-app.use('/api/places', placeRoutes);
-app.use('/api/users', userRoutes);
+
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,12 +35,20 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/api/places', placeRoutes);
+app.use('/api/users', userRoutes);
+
 app.use(() => {
     const error = new HttpError("Couldn't find this route", 404);
     throw error;
 });
 
 const errorMiddleWare: ErrorRequestHandler = (error, req, res, next) => {
+    if (req.file) {
+        fs.unlink(req.file.path, (err) => {
+            console.log('err with uploaded file');
+        });
+    }
     if (res.headersSent) return next(error);
 
     res.status(error.errorCode || 500).json({
