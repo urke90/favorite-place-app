@@ -1,6 +1,6 @@
-import axios from 'axios';
+const axios = require('axios');
 
-export const getAddressGeoLocation = async (address: string) => {
+exports.getAddressGeoLocation = async (address) => {
     const MAPBOX_API_TOKEN = process.env.MAPBOX_API_TOKEN;
 
     // https://docs.mapbox.com/api/search/geocoding/

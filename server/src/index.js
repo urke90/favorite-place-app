@@ -1,12 +1,12 @@
-import express, { ErrorRequestHandler } from 'express';
-import fs from 'fs';
-import path from 'path';
-import cors from 'cors';
-import mongoose from 'mongoose';
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
-import placeRoutes from './routes/places-routes';
-import userRoutes from './routes/users-routes';
-import HttpError from './types/error/http-error';
+const placeRoutes = require('./routes/places-routes.js');
+const userRoutes = require('./routes/users-routes');
+const HttpError = require('./models/http-error');
 
 const app = express();
 
@@ -43,7 +43,7 @@ app.use(() => {
     throw error;
 });
 
-const errorMiddleWare: ErrorRequestHandler = (error, req, res, next) => {
+const errorMiddleWare = (error, req, res, next) => {
     if (req.file) {
         fs.unlink(req.file.path, (err) => {
             console.log('err with uploaded file');
@@ -59,7 +59,7 @@ const errorMiddleWare: ErrorRequestHandler = (error, req, res, next) => {
 app.use(errorMiddleWare);
 
 mongoose
-    .connect(process.env.MONGO_DB_URL!)
+    .connect(process.env.MONGO_DB_URL)
     .then(() => {
         console.log('mongo connected');
 

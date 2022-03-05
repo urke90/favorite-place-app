@@ -1,15 +1,23 @@
-import { Router } from 'express';
-import { check } from 'express-validator';
+// import { Router } from 'express';
+const { Router } = require('express');
+const { check } = require('express-validator');
 
-import { checkAuth } from '../middlewares/check-auth';
+const { checkAuth } = require('../middlewares/check-auth');
 
-import {
+// import {
+//     getPlaceByPlaceId,
+//     getPlacesByUserId,
+//     createPlace,
+//     updatePlaceById,
+//     deletePlaceById
+// } from '../controllers/places-controllers';
+const {
     getPlaceByPlaceId,
     getPlacesByUserId,
     createPlace,
     updatePlaceById,
     deletePlaceById
-} from '../controllers/places-controllers';
+} = require('../controllers/places-controllers');
 
 const router = Router();
 
@@ -43,4 +51,4 @@ router.patch(
 
 router.delete('/:placeId', deletePlaceById);
 
-export default router;
+module.exports = router;

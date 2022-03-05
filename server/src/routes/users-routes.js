@@ -1,13 +1,22 @@
-import { Router } from 'express';
-import { check } from 'express-validator';
+const Router = require('express').Router;
 
-import { fileUpload } from '../middlewares/file-upload.js';
+// import { Router } from 'express';
+const { check } = require('express-validator');
 
-import {
+// import { fileUpload } from '../middlewares/file-upload.js';
+
+const { fileUpload } = require('../middlewares/file-upload');
+
+// import {
+//     usersLogin,
+//     usersSignup,
+//     getUsers
+// } from '../controllers/user-controllers';
+const {
     usersLogin,
     usersSignup,
     getUsers
-} from '../controllers/user-controllers';
+} = require('../controllers/user-controllers');
 
 const router = Router();
 
@@ -44,4 +53,4 @@ router.patch(
     }
 );
 
-export default router;
+module.exports = router;
