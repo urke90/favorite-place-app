@@ -42,9 +42,9 @@ const UserAccount = () => {
                             validators={[VALIDATOR_MINLENGTH(3)]}
                             onInputChange={() => {}}
                         />
-                        <Input
+                        {/* <Input
                             element="input"
-                            id="name"
+                            id="password"
                             type="password"
                             label="Password"
                             errorText=""
@@ -53,13 +53,13 @@ const UserAccount = () => {
                         />
                         <Input
                             element="input"
-                            id="name"
+                            id="reset_password"
                             type="password"
                             label="Confirm Password"
                             errorText=""
                             validators={[VALIDATOR_MINLENGTH(3)]}
                             onInputChange={() => {}}
-                        />
+                        /> */}
 
                         <ImagePicker />
                     </div>
