@@ -141,3 +141,18 @@ exports.usersSignup = async (req, res, next) => {
         token
     });
 };
+
+exports.getUserById = async (req, res, next) => {
+    const userId = req.params.userId;
+
+    let user;
+    try {
+        user = await User.findById(userId, '-password');
+        console.log('user from get user by id', user);
+    } catch (err) {
+        return next(
+            new HttpError('Something went wrong, please try again!', 500)
+        );
+    }
+    res.status(200).json({ user: user.toObject({ getters: true }) });
+};

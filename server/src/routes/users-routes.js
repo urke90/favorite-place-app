@@ -15,12 +15,15 @@ const { fileUpload } = require('../middlewares/file-upload');
 const {
     usersLogin,
     usersSignup,
-    getUsers
+    getUsers,
+    getUserById
 } = require('../controllers/user-controllers');
 
 const router = Router();
 
 router.get('/', getUsers);
+
+router.get('/:userId', getUserById);
 
 router.post(
     '/signup',
