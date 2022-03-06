@@ -10,14 +10,12 @@
 }
 
 .user__img {
-    flex-basis: 300px;
+    /* flex-basis: 300px; */
     margin-right: 10px;
-}
-.user__img img {
-    width: 100%;
-    margin: 0 auto;
+    /* border: 1px solid red; */
 }
 
 .user__info {
+    /* border: 1px solid blue; */
     flex-basis: 40%;
 }
