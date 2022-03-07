@@ -51,8 +51,11 @@ const UpdatePlace: React.FC = () => {
     const { placeId } = useParams<{ placeId: string }>();
     const [loadedPlace, setloadedPlace] = useState<IPlace>();
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
-    const [updatePlaceState, inputChangeHandler, setFormData] =
-        useForm(updatePlaceForm);
+    const {
+        state: updatePlaceState,
+        inputChangeHandler,
+        setFormData
+    } = useForm(updatePlaceForm);
 
     if (!placeId) throw new Error('Place ID not available');
 
