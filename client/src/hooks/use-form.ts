@@ -10,7 +10,7 @@ enum ReducerActionType {
 type ActionsType =
     | {
           type: ReducerActionType.INPUT_CHANGE;
-          payload: { id: string; value: string; isValid: boolean };
+          payload: { id: string; value: string | File; isValid: boolean };
       }
     | { type: ReducerActionType.SET_DATA; payload: { inputs: IFormState } };
 
@@ -54,8 +54,12 @@ const formReducer = (state: IFormState, action: ActionsType) => {
 const useForm = (stateSchema: IFormState) => {
     const [state, dispatch] = useReducer(formReducer, stateSchema);
 
+    const setFormData = useCallback((inputs: IFormState): void => {
+        dispatch({ type: ReducerActionType.SET_DATA, payload: { inputs } });
+    }, []);
+
     const inputChangeHandler = useCallback(
-        (id: string, value: string, isValid: boolean): void => {
+        (id: string, value: string | File, isValid: boolean): void => {
             dispatch({
                 type: ReducerActionType.INPUT_CHANGE,
                 payload: { id, value, isValid }
@@ -63,10 +67,6 @@ const useForm = (stateSchema: IFormState) => {
         },
         []
     );
-
-    const setFormData = useCallback((inputs: IFormState): void => {
-        dispatch({ type: ReducerActionType.SET_DATA, payload: { inputs } });
-    }, []);
 
     return { state, inputChangeHandler, setFormData };
 };

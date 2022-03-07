@@ -14,11 +14,6 @@ const ImagePicker: React.FC<IImagePicker> = ({ id, center, onImageChange }) => {
     const [file, setFile] = useState<File | null>(null);
     const [image, setImage] = useState<string | ArrayBuffer | null>(null);
 
-    console.log('image', image);
-    console.log('image type', typeof image);
-    console.log('file', file);
-    console.log('file type', typeof file);
-
     const pickedHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
         if (evt.target.files?.length) {
             setFile(evt.target.files[0]);

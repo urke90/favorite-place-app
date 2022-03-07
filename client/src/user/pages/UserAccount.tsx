@@ -50,11 +50,9 @@ const UserAccount: React.FC = () => {
         setFormData
     } = useForm(userAccountState);
 
-    // console.log('userState', userState);
-
     const submitAccountDetails = (evt: React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        console.log('account details submitted');
+        console.log('account details submitted', userState);
     };
 
     useEffect(() => {
@@ -128,8 +126,12 @@ const UserAccount: React.FC = () => {
                                 validators={[VALIDATOR_REQUIRE()]}
                                 onInputChange={inputChangeHandler}
                                 initValue={userState.inputs.name.value}
+                                initValid={userState.inputs.name.isValid}
                             />
-                            <ImagePicker id="image" onImageChange={() => {}} />
+                            <ImagePicker
+                                id="image"
+                                onImageChange={inputChangeHandler}
+                            />
                             <Button type="submit">UPDATE PROFILE</Button>
                         </form>
                     </div>

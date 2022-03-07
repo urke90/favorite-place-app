@@ -1,5 +1,5 @@
 interface IFormItem {
-    value: string;
+    value: any;
     isValid: boolean;
 }
 
