@@ -34,7 +34,8 @@ const newPlaceInitState: IFormState = {
 const NewPlace: React.FC = () => {
     const { userId, token } = useAuth();
     const { isLoading, error, clearErrorHandler, sendRequest } = useAxios();
-    const [newPlaceState, inputChangeHandler] = useForm(newPlaceInitState);
+    const { state: newPlaceState, inputChangeHandler } =
+        useForm(newPlaceInitState);
     const navigate = useNavigate();
 
     const newPlaceSubmitHandler = async (

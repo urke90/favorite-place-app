@@ -44,8 +44,11 @@ const UserAccount: React.FC = () => {
     const [user, setUser] = useState<IUser>();
     const { userId } = useAuth();
     const { isLoading, sendRequest, error, clearErrorHandler } = useAxios();
-    const [userState, inputChangeHandler, setFormData] =
-        useForm(userAccountState);
+    const {
+        state: userState,
+        inputChangeHandler,
+        setFormData
+    } = useForm(userAccountState);
 
     // console.log('userState', userState);
 

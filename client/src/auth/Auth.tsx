@@ -27,8 +27,11 @@ const Auth: React.FC = () => {
 
     const [isLoginMode, toggleLoginMode] = useToggle(true);
 
-    const [authState, inputChangeHandler, setAuthFormData] =
-        useForm(authLoginState);
+    const {
+        state: authState,
+        inputChangeHandler,
+        setFormData: setAuthFormData
+    } = useForm(authLoginState);
 
     const { onLogin } = useAuth();
 
