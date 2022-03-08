@@ -1,6 +1,7 @@
 import { useReducer, useCallback } from 'react';
 
 import { IFormState } from 'types/form/form';
+import { formIsValid } from 'util/form-data';
 
 enum ReducerActionType {
     INPUT_CHANGE = 'INPUT_CHANGE',
@@ -30,9 +31,7 @@ const formReducer = (state: IFormState, action: ActionsType) => {
                 }
             };
 
-            newState.formIsValid = !Object.values(newState.inputs).some(
-                (input) => input.isValid === false
-            );
+            newState.formIsValid = formIsValid(newState.inputs);
 
             return newState;
 
@@ -41,9 +40,7 @@ const formReducer = (state: IFormState, action: ActionsType) => {
                 ...action.payload.inputs
             };
 
-            newState.formIsValid = !Object.values(newState.inputs).some(
-                (input) => input.isValid === false
-            );
+            newState.formIsValid = formIsValid(newState.inputs);
 
             return newState;
         default:
