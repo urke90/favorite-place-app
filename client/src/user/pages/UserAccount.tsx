@@ -9,22 +9,12 @@ import useAuth from 'hooks/use-auth';
 import useForm from 'hooks/use-form';
 import { IUser } from 'types/user/user';
 import { IFormState } from 'types/form/form';
-
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import Avatar from 'shared/components/UI/Avatar';
-import './UserAccount.css';
 import Button from 'shared/components/FormElements/Button';
 
-/**
- * 1. Get the userId from the url
- * 2. send get request to get the current user
- * 3. we will need:
- *      - user image
- *      - user name
- *      - reset pw  =====> Check if this can be done  in the same form ?!?!?!?!?!?
- *  ? maybe we could later have some recent chat messages or recent contacts???
- */
+import './UserAccount.css';
 
 const userAccountState: IFormState = {
     inputs: {
@@ -42,7 +32,7 @@ const userAccountState: IFormState = {
 
 const UserAccount: React.FC = () => {
     const [user, setUser] = useState<IUser>();
-    const { userId } = useAuth();
+    const { userId, token } = useAuth();
     const { isLoading, sendRequest, error, clearErrorHandler } = useAxios();
     const {
         state: userState,
@@ -50,9 +40,28 @@ const UserAccount: React.FC = () => {
         setFormData
     } = useForm(userAccountState);
 
-    const submitAccountDetails = (evt: React.FormEvent<HTMLFormElement>) => {
+    const submitAccountDetails = async (
+        evt: React.FormEvent<HTMLFormElement>
+    ) => {
         evt.preventDefault();
         console.log('account details submitted', userState);
+
+        const { name, image } = userState.inputs;
+
+        const data = new FormData();
+        data.append('name', name.value);
+        data.append('image', image.value);
+
+        try {
+            const response = await sendRequest({
+                url: `/api/users/${userId}/update`,
+                method: 'PATCH',
+                data,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        } catch (err) {}
     };
 
     useEffect(() => {
@@ -67,6 +76,8 @@ const UserAccount: React.FC = () => {
                     return;
                 }
 
+                console.log('response fro getting user infor', response);
+
                 setFormData({
                     inputs: {
                         name: {
@@ -75,7 +86,7 @@ const UserAccount: React.FC = () => {
                         },
                         image: {
                             value: response.data.user.image,
-                            isValid: true
+                            isValid: false
                         }
                     },
                     formIsValid: true
@@ -99,6 +110,11 @@ const UserAccount: React.FC = () => {
         );
     }
 
+    const { name, image } = userState.inputs;
+
+    // image value should be object since it is file that should be uploaded. (:File)
+    const btnIsDisabled = !name.isValid || typeof image.value !== 'object';
+
     return (
         <div className="user-profile">
             <ErrorModal onCloseModal={clearErrorHandler} error={error} />
@@ -111,7 +127,7 @@ const UserAccount: React.FC = () => {
                         <Avatar
                             image={user.image}
                             alt={user.name}
-                            width={200}
+                            width={250}
                         />
                     </div>
                     <div className="user__info">
@@ -132,7 +148,9 @@ const UserAccount: React.FC = () => {
                                 id="image"
                                 onImageChange={inputChangeHandler}
                             />
-                            <Button type="submit">UPDATE PROFILE</Button>
+                            <Button disabled={btnIsDisabled} type="submit">
+                                UPDATE PROFILE
+                            </Button>
                         </form>
                     </div>
                 </div>

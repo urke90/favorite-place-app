@@ -17,7 +17,6 @@ const ImagePicker: React.FC<IImagePicker> = ({ id, center, onImageChange }) => {
     const pickedHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
         if (evt.target.files?.length) {
             setFile(evt.target.files[0]);
-            const pickedFile = evt.target.files[0];
 
             onImageChange(id, evt.target.files[0], true);
         }
