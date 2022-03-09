@@ -9,7 +9,11 @@ const Avatar: React.FC<{
 }> = ({ image, alt, className, width }) => {
     return (
         <div className={`avatar ${className}`}>
-            <img src={image} alt={alt} style={{ width: width }} />
+            <img
+                src={'http://localhost:5000/' + image}
+                alt={alt}
+                style={{ width: width }}
+            />
         </div>
     );
 };

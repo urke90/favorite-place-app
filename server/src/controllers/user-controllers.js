@@ -148,7 +148,30 @@ exports.getUserById = async (req, res, next) => {
     let user;
     try {
         user = await User.findById(userId, '-password');
-        console.log('user from get user by id', user);
+        // console.log('user from get user by id', user);
+    } catch (err) {
+        return next(
+            new HttpError('Something went wrong, please try again!', 500)
+        );
+    }
+    res.status(200).json({ user: user.toObject({ getters: true }) });
+};
+
+exports.updateUser = async (req, res, next) => {
+    const userId = req.params.userId;
+    const name = req.body.name;
+    const image = req.file.filename;
+
+    console.log('REQ FILE PATH', req.file);
+
+    let user;
+    try {
+        user = await User.findOneAndUpdate(
+            { _id: userId },
+            { name, image: 'uploads/images/' + image },
+            { new: true }
+        );
+        console.log('user while UPDATE USER', user);
     } catch (err) {
         return next(
             new HttpError('Something went wrong, please try again!', 500)
