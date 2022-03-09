@@ -12,7 +12,7 @@ const Avatar: React.FC<{
             <img
                 src={'http://localhost:5000/' + image}
                 alt={alt}
-                style={{ width: width }}
+                style={{ width }}
             />
         </div>
     );

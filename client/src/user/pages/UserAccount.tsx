@@ -127,7 +127,7 @@ const UserAccount: React.FC = () => {
                         <Avatar
                             image={user.image}
                             alt={user.name}
-                            width={200}
+                            width={250}
                         />
                     </div>
                     <div className="user__info">
