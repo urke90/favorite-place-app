@@ -50,12 +50,12 @@ const ImagePicker: React.FC<IImagePicker> = ({ id, center, onImageChange }) => {
                 <Button type="button" onClick={pickImageHandler}>
                     PICK IMAGE
                 </Button>
-                {typeof image === 'string' ? (
+                {image && typeof image === 'string' ? (
                     <div className="image-upload__preview">
                         <img src={image} alt="Preview" />
                     </div>
                 ) : (
-                    <p>Image preview will be shown once you select image!</p>
+                    <p>Please pick image!</p>
                 )}
             </div>
         </div>
