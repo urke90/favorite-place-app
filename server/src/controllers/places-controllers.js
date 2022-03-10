@@ -62,7 +62,8 @@ exports.getPlacesByUserId = async (req, res, next) => {
 };
 
 exports.createPlace = async (req, res, next) => {
-    const { title, description, address, creatorId } = req.body;
+    const { title, description, address } = req.body;
+    const image = req.file.filename;
 
     const errors = validationResult(req);
 
@@ -81,7 +82,7 @@ exports.createPlace = async (req, res, next) => {
     const createdPlace = new Place({
         title,
         description,
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
+        image: 'uploads/images/' + image,
         location: locationCordinates,
         address,
         creatorId: req.userData.userId

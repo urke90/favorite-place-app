@@ -9,6 +9,7 @@ import Button from 'shared/components/FormElements/Button';
 import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from 'util/validatiors';
+import ImagePicker from 'shared/components/FormElements/ImagePicker';
 
 import './PlaceForm.css';
 
@@ -24,6 +25,10 @@ const newPlaceInitState: IFormState = {
             isValid: false
         },
         address: {
+            value: '',
+            isValid: false
+        },
+        image: {
             value: '',
             isValid: false
         }
@@ -43,22 +48,19 @@ const NewPlace: React.FC = () => {
     ) => {
         evt.preventDefault();
 
-        /**
-         * TODO in the data we send later we should provide imageUrl ===   users will upload img!!!
-         */
-
-        const { address, description, title } = newPlaceState.inputs;
-        const newPlaceData = {
-            title: title.value,
-            description: description.value,
-            address: address.value
-        };
+        const { address, description, title, image } = newPlaceState.inputs;
 
         try {
+            const formData = new FormData();
+            formData.append('title', title.value);
+            formData.append('description', description.value);
+            formData.append('address', address.value);
+            formData.append('image', image.value);
+
             const response = await sendRequest({
                 url: '/api/places',
                 method: 'POST',
-                data: newPlaceData,
+                data: formData,
                 headers: { Authorization: 'Bearer ' + token }
             });
 
@@ -102,6 +104,7 @@ const NewPlace: React.FC = () => {
                     validators={[VALIDATOR_REQUIRE()]}
                     onInputChange={inputChangeHandler}
                 />
+                <ImagePicker id="image" onImageChange={inputChangeHandler} />
                 <Button disabled={!newPlaceState.formIsValid} type="submit">
                     ADD PLACE
                 </Button>

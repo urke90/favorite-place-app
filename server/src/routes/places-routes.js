@@ -3,6 +3,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 const { checkAuth } = require('../middlewares/check-auth');
+const { fileUpload } = require('../middlewares/file-upload');
 
 // import {
 //     getPlaceByPlaceId,
@@ -35,10 +36,11 @@ router.use(checkAuth);
 
 router.post(
     '/',
+    fileUpload.single('image'),
     [
-        check('title').not().isEmpty(),
+        (check('title').not().isEmpty(),
         check('description').isLength({ min: 5 }),
-        check('address').not().isEmpty()
+        check('address').not().isEmpty())
     ],
     createPlace
 );
