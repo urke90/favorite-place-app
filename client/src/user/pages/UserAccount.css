@@ -10,7 +10,7 @@
 }
 
 .user__img {
-    /* flex-basis: 300px; */
+    flex-basis: 40%;
     margin-right: 10px;
     /* border: 1px solid red; */
 }

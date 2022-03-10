@@ -8,12 +8,8 @@ const Avatar: React.FC<{
     styles?: string;
 }> = ({ image, alt, className, width }) => {
     return (
-        <div className={`avatar ${className}`}>
-            <img
-                src={'http://localhost:5000/' + image}
-                alt={alt}
-                style={{ width }}
-            />
+        <div className={`avatar ${className}`} style={{ width, height: width }}>
+            <img src={'http://localhost:5000/' + image} alt={alt} />
         </div>
     );
 };
