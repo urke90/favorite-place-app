@@ -9,13 +9,15 @@ import Map from 'shared/components/UI/Map';
 import ErrorModal from 'shared/components/UI/Modals/ErrorModal';
 import LoadingSpinner from 'shared/components/UI/LoadingSpinner';
 
+import MapBoxMap from 'shared/components/UI/MapBox/MapBoxMap';
+
 import './PlaceItem.css';
 
 const PlaceItem: React.FC<{
     place: IPlace;
     onDelete: (placeId: string) => void;
 }> = ({
-    place: { address, id, title, description, image, creatorId },
+    place: { address, id, title, description, image, creatorId, location },
     onDelete
 }) => {
     const [showGoogleMap, toggleGoogleMapHandler] = useToggle(false);
@@ -40,6 +42,7 @@ const PlaceItem: React.FC<{
             onDelete(id);
         } catch (err) {}
     };
+    console.log('location', location);
 
     return (
         <>
@@ -53,7 +56,8 @@ const PlaceItem: React.FC<{
                 footer={<Button onClick={toggleGoogleMapHandler}>CLOSE</Button>}
             >
                 <div className="map-container">
-                    <Map />
+                    {/* <Map initLocation={location} isCreatePlaceMode={false} /> */}
+                    <MapBoxMap coordinates={[...Object.values(location)]} />
                 </div>
             </Modal>
             <Modal

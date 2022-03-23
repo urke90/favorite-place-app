@@ -8,7 +8,7 @@ export interface IPlace {
     creatorId: string;
 }
 
-interface ILocation {
+export interface ILocation {
     lat: number;
     lng: number;
 }

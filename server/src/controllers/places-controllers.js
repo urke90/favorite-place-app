@@ -62,7 +62,7 @@ exports.getPlacesByUserId = async (req, res, next) => {
 };
 
 exports.createPlace = async (req, res, next) => {
-    const { title, description, address } = req.body;
+    const { title, description, address, location } = req.body;
     const image = req.file.filename;
 
     const errors = validationResult(req);
@@ -74,16 +74,19 @@ exports.createPlace = async (req, res, next) => {
         );
     }
 
-    const locationCordinates = (await getAddressGeoLocation(address)) || {
-        lat: -78.91973,
-        lng: 36.0094
-    };
+    const loc = JSON.parse(location);
+    console.log('loc', loc);
+
+    // const locationCordinates = (await getAddressGeoLocation(address)) || {
+    //     lat: -78.91973,
+    //     lng: 36.0094
+    // };
 
     const createdPlace = new Place({
         title,
         description,
         image: 'uploads/images/' + image,
-        location: locationCordinates,
+        location: JSON.parse(location),
         address,
         creatorId: req.userData.userId
     });
